@@ -12,6 +12,7 @@ library(dplyr, lib='/home/mc10739/R/x86_64-conda-linux-gnu-library/4.4')
 library(tidyr, lib='/home/mc10739/R/x86_64-conda-linux-gnu-library/4.4')
 library(scales, lib='/home/mc10739/R/x86_64-conda-linux-gnu-library/4.4')
 library(ggplot2, lib='/home/mc10739/R/x86_64-conda-linux-gnu-library/4.4')
+library(gridExtra, lib='/home/mc10739/R/x86_64-conda-linux-gnu-library/4.4')
 
 # To use this file you need an lfmm file, a geno file, a env file for the actual environmental
 # situation and a env file for the environmental projection
@@ -112,7 +113,7 @@ print(best_run)
 
 barchart(
   project,
-  K = 8,
+  K = 7,
   run = best_run,
   border = NA,
   space = 0,
@@ -137,6 +138,10 @@ color_palette <- c("V1" = "blue", "V2" = "red", "V3" = "green", "V4" = "purple",
 
 plots_list <- list()
 
+k.directory <- paste0(work.directory,'/K_value/')
+if (!dir.exists(k.directory)) dir.create(k.directory, recursive = TRUE)
+
+
 for (i in 1:max_K){
   
   # Get the Q matrix for the current value of K
@@ -151,6 +156,9 @@ for (i in 1:max_K){
   # Convert to long format
   data_long <- pivot_longer(get_Q_bind, cols = starts_with("V"), names_to = "Variable", values_to = "Proportion")
   data_long$Seq_ID <- factor(data_long$Seq_ID, levels = get_Q_bind$Seq_ID)
+  df_wide <- pivot_wider(data_long, names_from = Variable, values_from = Proportion)
+
+  write.csv(df_wide, paste0(k.directory,"/K",i,"_value_sorted.csv"),row.names = FALSE)
   
   # Create the barplot
   plot <- ggplot(data_long, aes(x = Seq_ID, y = Proportion, fill = Variable)) +
