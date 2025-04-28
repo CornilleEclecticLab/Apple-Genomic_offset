@@ -15,8 +15,8 @@ bio.nb_tif = 1:19 # Based on the number of bio climatic variable : DO NOT CHANGE
 
 ## extract climate data from coordinate
 
-coordinate_file = "./in/coordinate_orchard"
-ascii_folder = "../../Climatic_data/CHELSA_ascii/"
+coordinate_file = "./in/info_samples.txt"
+ascii_folder = "~/Bureau/Maxime_PhD/02-Analysis/Climatic_data/CHELSA_ascii/"
 bio.nb = 1:19 ## Based on the number of bio climatic variable : DO NOT CHANGE IT
 bio_num = c(1:20) #there is a ID column + 19 bio variables
-out_name = "Bioclim_orchard"
+out_name = "Bioclim_sample_chelsa"
