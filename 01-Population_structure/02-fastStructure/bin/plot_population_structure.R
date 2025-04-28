@@ -59,7 +59,7 @@ for (i in 2:10) {  # Loop from K=2 to K=10
     )
   
   # Save the plot to the list
-  plots_list[[i]] <- plot
+  plots_list[[i-1]] <- plot
   
   # Optionally, write the wide-format data to CSV
   #df_wide <- pivot_wider(data_long, names_from = Variable, values_from = Proportion)
