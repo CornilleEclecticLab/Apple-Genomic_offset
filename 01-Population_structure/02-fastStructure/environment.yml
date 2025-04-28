@@ -1,0 +1,9 @@
+name: faststructure
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - python=2.7
+  - faststructure
+
