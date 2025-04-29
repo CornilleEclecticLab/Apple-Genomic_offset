@@ -20,6 +20,9 @@ col <- c(
 # Directory containing the Q files
 q_files_dir <- "./out/s03.pophelper"
 
+#Information file
+info <- read.table("./in/data_tree.txt", header=T, sep='\t', dec='.')
+
 # Get all Major Cluster Q files
 afiles <- list.files(q_files_dir, pattern = "Major.+Q$", full.names = TRUE)
 
@@ -34,7 +37,8 @@ for (i in 2:10) {  # Loop from K=2 to K=10
   # Create the ID column (e.g., individual names or sample IDs)
   seq_id <- seq_along(get_Q$V1)  # Assuming each row corresponds to an individual
  
-  get_Q_bind <- cbind(get_Q, Seq_ID = seq_id)
+  get_Q_bind <- cbind(get_Q, info)
+  get_Q_bind <- get_Q_bind %>% arrange(Order)
   #print(get_Q_bind)
   
   # Convert the data to long format
