@@ -1,4 +1,4 @@
-Seq_ID	individual_ID	Country	Country code (ISO 3166)	Latitude	Longitude	vcf order	Plot order
+Seq_ID	individual_ID	Country	Country code (ISO 3166)	Latitude	Longitude	Order_vcf	Order_plot
 858C_CTTGTA	858C	France	FRA	48.46	2.67	1	30
 A011	AT2_386	France	FRA	NA	NA	2	1
 A012	AT2_456	France	FRA	NA	NA	3	2

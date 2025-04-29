@@ -38,7 +38,7 @@ for (i in 2:10) {  # Loop from K=2 to K=10
   #seq_id <- seq_along(get_Q$V1)  # Assuming each row corresponds to an individual
  
   get_Q_bind <- cbind(get_Q, info)
-  get_Q_bind <- get_Q_bind %>% arrange(Plot.order)
+  get_Q_bind <- get_Q_bind %>% arrange(Order_plot)
   #print(get_Q_bind)
   
   # Convert the data to long format
