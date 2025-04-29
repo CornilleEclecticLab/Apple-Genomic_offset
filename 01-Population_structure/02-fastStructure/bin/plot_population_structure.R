@@ -35,10 +35,10 @@ for (i in 2:10) {  # Loop from K=2 to K=10
   get_Q <- read.table(qfile, header = FALSE, stringsAsFactors = FALSE)
   
   # Create the ID column (e.g., individual names or sample IDs)
-  seq_id <- seq_along(get_Q$V1)  # Assuming each row corresponds to an individual
+  #seq_id <- seq_along(get_Q$V1)  # Assuming each row corresponds to an individual
  
   get_Q_bind <- cbind(get_Q, info)
-  get_Q_bind <- get_Q_bind %>% arrange(Order)
+  get_Q_bind <- get_Q_bind %>% arrange(Plot.order)
   #print(get_Q_bind)
   
   # Convert the data to long format
