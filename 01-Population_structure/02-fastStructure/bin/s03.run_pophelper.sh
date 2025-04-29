@@ -1,6 +1,6 @@
 #!/bin/bash
 
-num_clumpak_folder=1745854284 #Depending of clumpak results
+num_clumpak_folder=1745928098 #Depending of clumpak results
 Project_name="All_data_wo_orientalis"
 ZIP_file="./out/"$Project_name"/s02.clumpak/"$num_clumpak_folder".zip"
 
