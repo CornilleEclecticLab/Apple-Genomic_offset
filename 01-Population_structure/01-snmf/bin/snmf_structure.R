@@ -80,7 +80,7 @@ pc = pca(paste0(work.directory,'/',file_name,"_filt.geno"), scale = T)
 tw = tracy.widom((pc))
 
 # plot the percentage of variance explained by each component
-png(paste0(fig.directory,"/percentage_of_variance_explained_by_each_component.png"), width = 8, height = 5, units = "in", res = 300)
+png(paste0(fig.directory,"/percentage_of_variance_explained_by_each_component_",file_name,".png"), width = 8, height = 5, units = "in", res = 300)
 plot(tw$percentage,
      pch = 19,
      col = "darkblue",
@@ -100,7 +100,7 @@ project = snmf(
 # plot cross-entropy criterion for all runs in the snmf project
 par(mar = c(5,5,2,2))
 
-png(paste0(fig.directory,"/cross_entropy.png"), width = 8, height = 5, units = "in", res = 300)
+png(paste0(fig.directory,"/cross_entropy_",file_name,".png"), width = 8, height = 5, units = "in", res = 300)
 plot(project, col = "blue", pch = 19, cex = 1.2) # ylim = c(0.64, 0.72)
 dev.off()
 
@@ -127,8 +127,8 @@ barchart(
 print(bp$order)
 #
 list_accession_ordered <- list_accession %>%
-  mutate(Order = factor(Order, levels = bp$order)) %>%
-  arrange(Order)
+  mutate(Order = factor(order_vcf, levels = bp$order)) %>%
+  arrange(Order_vcf)
 print(list_accession_ordered)
 
 
@@ -147,7 +147,7 @@ for (i in 1:max_K){
   # Get the Q matrix for the current value of K
   get_Q = Q(project, K = i, run = best_run)
   get_Q_bind <- cbind(get_Q, list_accession_ordered)
-  get_Q_bind <- get_Q_bind %>% arrange(Order)
+  get_Q_bind <- get_Q_bind %>% arrange(Order_plot)
   
   # Identify V columns dynamically
   v_columns <- grep("^V", names(get_Q_bind), value = TRUE)
