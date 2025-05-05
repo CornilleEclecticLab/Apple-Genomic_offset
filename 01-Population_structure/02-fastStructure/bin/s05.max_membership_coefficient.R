@@ -28,8 +28,13 @@ library(scatterplot3d)
 #info <- read.table(INFO_FILE, header=T, sep='\t', dec='.')
 
 Project_name="All_data_wo_orientalis"
-OUT_FOLDER="./out/All_data_wo_orientalis/s05.max_membership_coefficient"
-Q_FILES_DIR="./out/All_data_wo_orientalis/s03.pophelper"
+OUT_FOLDER="./out/All_data_wo_orientalis/s06.max_membership_coefficient"
+Q_FILES_DIR="out/All_data_wo_orientalis/s05.membership_coefficient"
+
+
+if (!dir.exists(OUT_FOLDER)) {
+  dir.create(OUT_FOLDER, recursive = TRUE)
+}
 
 
 # FUNCTION :
