@@ -127,8 +127,8 @@ barchart(
 print(bp$order)
 #
 list_accession_ordered <- list_accession %>%
-  mutate(Order = factor(order_vcf, levels = bp$order)) %>%
-  arrange(Order_vcf)
+  mutate(Order = factor(Order_vcf_wo_orientalis, levels = bp$order)) %>%
+  arrange(Order_vcf_wo_orientalis)
 print(list_accession_ordered)
 
 
