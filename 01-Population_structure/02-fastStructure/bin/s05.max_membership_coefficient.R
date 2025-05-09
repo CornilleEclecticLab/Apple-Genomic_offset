@@ -55,15 +55,16 @@ plots_list <- list()
 for (file in files_ordered) {
   print(file)
   struct_file <- read.csv(file, header = TRUE, sep = ",", dec = ".")
-  struct_file <- struct_file[, 1:(ncol(struct_file) - 6)] # 6 is the number of useless column to plot the max membership coeff
-  sub.struct <- struct_file[,1:length(struct_file)]
-  sub.struct <- data.frame(sub.struct)
-  max.pos <- max.col(struct_file[,1:length(struct_file)], ties.method = c("random", "first", "last"))
+  #struct_file <- struct_file[, 1:(ncol(struct_file) - 6)] # 6 is the number of useless column to plot the max membership coeff
+  #sub.struct <- struct_file[,1:length(struct_file)]
+  #sub.struct <- data.frame(sub.struct)
+  struct_file <- struct_file[, grepl("V", names(struct_file))]
+  max.pos <- max.col(struct_file, ties.method = c("random", "first", "last"))
   print(max.pos)
   
   max_cluster <- NA
   for (i in 1:nrow(struct_file)) {
-    max_cluster[i] <- sub.struct[i, max.pos[i] ]
+    max_cluster[i] <- struct_file[i, max.pos[i] ]
   }
   max_cluster <- data.frame(max_cluster)
   
