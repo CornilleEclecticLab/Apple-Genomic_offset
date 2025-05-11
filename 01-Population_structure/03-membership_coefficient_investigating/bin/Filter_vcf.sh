@@ -1,0 +1,55 @@
+#!/bin/bash
+
+#SBATCH --job-name=s08_bis.vcf_ind_removing
+#SBATCH --output=./out/gatk/s00.sbatch/s08_bis.vcf_ind_removing.out
+#SBATCH --error=./out/gatk/s00.sbatch/s08_bis.vcf_ind_removing.err
+#SBATCH --time=4:00:00
+#SBATCH --mem=5G
+#SBATCH --cpus-per-task=1
+
+module load all gencore/3
+module load bcftools
+module load plink/1.9
+module load samtools
+
+# Inputs
+VCF_LIST="./out/vcf_file_to_filtered_s08_bis.txt" # File listing VCFs (one per line)
+REMOVE_LIST="./03-membership_coefficient_investigating/out/fastStructure_admix_list_K5_0.5.txt" # A file with one sample ID per line to remove
+OUTPUT_DIR="./out/s08_bis" # Directory for outputs
+
+mkdir -p "$OUTPUT_DIR"
+
+while read -r VCF; do
+    if [[ ! -f "$VCF" ]]; then
+        echo "Warning: File not found - $VCF"
+        continue
+    fi
+
+    BASENAME=$(basename "$VCF" .vcf.gz)
+    FILTERED_VCF="${OUTPUT_DIR}/${BASENAME}_filtered.vcf.gz"
+    PLINK_PREFIX="${OUTPUT_DIR}/${BASENAME}_filtered"
+
+    echo "Processing $VCF..."
+
+    # Remove individuals
+    bcftools view --samples-file ^$REMOVE_LIST -Oz -o "$FILTERED_VCF" "$VCF"
+    tabix -p vcf "$FILTERED_VCF"
+
+    # Optional: skip if output is empty
+    if [[ $(bcftools view -H "$FILTERED_VCF" | wc -l) -eq 0 ]]; then
+        echo "Warning: No variants left in $FILTERED_VCF after filtering. Skipping..."
+        continue
+    fi
+
+    # Convert to PLINK .bed format
+    plink --vcf "$FILTERED_VCF" \
+        --make-bed \
+        --const-fid \
+        --out "$PLINK_PREFIX" \
+        --set-missing-var-ids @:\# \
+        --keep-allele-order \
+        --allow-extra-chr
+
+done < "$VCF_LIST"
+
+echo "All VCFs processed."
