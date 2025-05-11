@@ -1,8 +1,8 @@
 #!/bin/bash
 
-#SBATCH --job-name=s08_bis.vcf_ind_removing
-#SBATCH --output=./out/gatk/s00.sbatch/s08_bis.vcf_ind_removing.out
-#SBATCH --error=./out/gatk/s00.sbatch/s08_bis.vcf_ind_removing.err
+#SBATCH --job-name=s02.filter_vcf
+#SBATCH --output=./out/s00.sbatch/s02.filter_vcf.out
+#SBATCH --error=./out/s00.sbatch/s02.filter_vcf.err
 #SBATCH --time=4:00:00
 #SBATCH --mem=5G
 #SBATCH --cpus-per-task=1
@@ -15,7 +15,7 @@ module load samtools
 # Inputs
 VCF_LIST="./in/vcf_file_to_filtered_admix.txt" # File listing VCFs (one per line)
 REMOVE_LIST="./03-membership_coefficient_investigating/out/fastStructure_admix_list_K5_0.5.txt" # A file with one sample ID per line to remove
-OUTPUT_DIR="./out/s08_bis" # Directory for outputs
+OUTPUT_DIR="./out/s02.filter_vcf" # Directory for outputs
 
 mkdir -p "$OUTPUT_DIR"
 
@@ -26,8 +26,8 @@ while read -r VCF; do
     fi
 
     BASENAME=$(basename "$VCF" .vcf.gz)
-    FILTERED_VCF="${OUTPUT_DIR}/${BASENAME}_filtered.vcf.gz"
-    PLINK_PREFIX="${OUTPUT_DIR}/${BASENAME}_filtered"
+    FILTERED_VCF="${OUTPUT_DIR}/${BASENAME}_admix_dom_rm.vcf.gz"
+    PLINK_PREFIX="${OUTPUT_DIR}/${BASENAME}_admix_dom_rm"
 
     echo "Processing $VCF..."
 
