@@ -13,7 +13,7 @@ module load plink/1.9
 module load samtools
 
 # Inputs
-VCF_LIST="./out/vcf_file_to_filtered_s08_bis.txt" # File listing VCFs (one per line)
+VCF_LIST="./in/vcf_file_to_filtered_admix.txt" # File listing VCFs (one per line)
 REMOVE_LIST="./03-membership_coefficient_investigating/out/fastStructure_admix_list_K5_0.5.txt" # A file with one sample ID per line to remove
 OUTPUT_DIR="./out/s08_bis" # Directory for outputs
 
