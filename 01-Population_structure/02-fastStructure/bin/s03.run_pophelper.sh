@@ -1,7 +1,7 @@
 #!/bin/bash
 
-num_clumpak_folder=1745928098 #Depending of clumpak results
-Project_name="All_data_wo_orientalis"
+num_clumpak_folder=1747052624 #Depending of clumpak results
+Project_name="admix_dom_removed"
 ZIP_file="./out/"$Project_name"/s02.clumpak/"$num_clumpak_folder".zip"
 
 unzip -q $ZIP_file -d ./out/$Project_name/s02-5.clumpak_2/
