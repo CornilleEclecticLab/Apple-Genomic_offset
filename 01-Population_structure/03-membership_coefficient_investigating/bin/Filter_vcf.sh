@@ -14,7 +14,8 @@ module load samtools
 
 # Inputs
 VCF_LIST="./in/vcf_file_to_filtered_admix.txt" # File listing VCFs (one per line)
-REMOVE_LIST="./03-membership_coefficient_investigating/out/fastStructure_admix_list_K5_0.5.txt" # A file with one sample ID per line to remove
+REMOVE_LIST="./03-membership_coefficient_investigating/out/fastStructure_admix_list_K5_0.2.txt" # A file with one sample ID per line to remove
+Threshold=0.2 # Threshold for naming used before
 OUTPUT_DIR="./out/s02.filter_vcf" # Directory for outputs
 
 mkdir -p "$OUTPUT_DIR"
@@ -26,8 +27,8 @@ while read -r VCF; do
     fi
 
     BASENAME=$(basename "$VCF" .vcf.gz)
-    FILTERED_VCF="${OUTPUT_DIR}/${BASENAME}_admix_dom_rm.vcf.gz"
-    PLINK_PREFIX="${OUTPUT_DIR}/${BASENAME}_admix_dom_rm"
+    FILTERED_VCF="${OUTPUT_DIR}/${BASENAME}_admix_dom_rm_${Threshold}.vcf.gz"
+    PLINK_PREFIX="${OUTPUT_DIR}/${BASENAME}_admix_dom_rm_${Threshold}"
 
     echo "Processing $VCF..."
 
