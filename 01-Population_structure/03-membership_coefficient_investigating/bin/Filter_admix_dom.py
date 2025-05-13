@@ -4,7 +4,7 @@ import re
 
 
 K_value=5
-threshold=0.5
+threshold=0.2
 
 # For fastStructure
 model="fastStructure"
@@ -43,7 +43,7 @@ admix_list = admix_df["Seq_ID"].tolist()
 admix_list = [str(i) for i in admix_list]
 admix_list = list(set(admix_list))
 admix_list.sort()
-print(admix_list)
+print(len(admix_list))
 # Save the list to a file
 output_file = os.path.join(ouput_folder, f"{model}_admix_list_K{K_value}_{threshold}.txt")
 with open(output_file, "w") as f:
