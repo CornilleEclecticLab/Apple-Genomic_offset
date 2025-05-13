@@ -28,8 +28,8 @@ library(scatterplot3d)
 #info <- read.table(INFO_FILE, header=T, sep='\t', dec='.')
 
 Project_name="All_data_wo_orientalis"
-OUT_FOLDER="./out/All_data_wo_orientalis/s06.max_membership_coefficient"
-Q_FILES_DIR="out/All_data_wo_orientalis/s05.membership_coefficient"
+OUT_FOLDER = paste0("./out/",Project_name,"/s06.max_membership_coefficient")
+Q_FILES_DIR = paste0("./out/",Project_name,"/s05.membership_coefficient")
 
 
 if (!dir.exists(OUT_FOLDER)) {
@@ -81,7 +81,7 @@ for (file in files_ordered) {
                          by = 0.05
                        ), 1)) +
     scale_y_continuous(name = 'Density') + labs(title = paste0("K ", ncol(struct_file))) + geom_vline(
-      xintercept = 0.82,
+      xintercept = 0.8,
       linetype = "dashed",
       color = "blue",
       size = 1
