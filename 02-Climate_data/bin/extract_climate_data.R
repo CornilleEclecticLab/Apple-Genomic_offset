@@ -15,7 +15,7 @@ bio.nb <- 1:19 ## we are going to get the 19 value and filtered depending on the
 varnames <- list.files(ascii_folder)
 print(varnames)
 
-data_coord <- read.delim(coordinate_file, sep = "\t", dec = ".", header = T)
+data_coord <- read.delim(coordinate_file, sep = "\t", dec = ",", header = T)
 data_coord$Latitude <- as.numeric(as.character(data_coord$Latitude))
 data_coord$Longitude <- as.numeric(as.character(data_coord$Longitude))
 print(str(data_coord))
@@ -31,7 +31,7 @@ for (i in 1:length(bio.nb)) {
 env_data <-
   extract(
     bioclim,
-    data_coord[c("Latitude", "Longitude")],
+    data_coord[c("Longitude", "Latitude")],
     method = 'simple',
     buffer = 30000 ,
     fun = mean,
