@@ -5,6 +5,7 @@ library(gridExtra, lib='/home/mc10739/R/x86_64-conda-linux-gnu-library/4.4')
 library(dplyr, lib='/home/mc10739/R/x86_64-conda-linux-gnu-library/4.4')
 library(tidyr, lib='/home/mc10739/R/x86_64-conda-linux-gnu-library/4.4')
 library(scales, lib='/home/mc10739/R/x86_64-conda-linux-gnu-library/4.4')
+library(svglite, lib='/home/mc10739/R/x86_64-conda-linux-gnu-library/4.4')
 
 args <- commandArgs(trailingOnly = TRUE)
 
@@ -73,4 +74,6 @@ combined_plots <- grid.arrange(grobs = plots_list, ncol = 1); plot(combined_plot
 
 # Combine all plots into a single PNG file
 png_file <- paste0(OUT_FOLDER,"/s04.Plot/",Project_name,"_faststructure_group.country.Major_K2_K10.png")
+svg_file <- paste0(OUT_FOLDER, "/s04.Plot/", Project_name, "_faststructure_group.country.Major_K2_K10.svg")
 ggsave(filename = png_file, plot = combined_plots, width = 8, height = 20, units = "in", dpi = 300)
+ggsave(filename = svg_file, plot = combined_plots, width = 8, height = 20, units = "in")
