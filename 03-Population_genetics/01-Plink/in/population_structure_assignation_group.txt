@@ -1,0 +1,149 @@
+Seq_ID	Cluster_FS	Cluster_snmf
+A022	V2 - Pdom	V3 - P.dom
+A011	V2 - Pdom	V3 - P.dom
+A012	V2 - Pdom	V3 - P.dom
+A015	V2 - Pdom	V3 - P.dom
+A016	V2 - Pdom	V3 - P.dom
+A025	V2 - Pdom	V3 - P.dom
+A018	V2 - Pdom	V3 - P.dom
+A019	V2 - Pdom	V3 - P.dom
+A023	V2 - Pdom	V3 - P.dom
+A024	V2 - Pdom	V3 - P.dom
+A017	V2 - Pdom	V3 - P.dom
+A020	V2 - Pdom	V3 - P.dom
+A027	V2 - Pdom	V3 - P.dom
+P44B1_L1P23	crops-wild admixed	crops-wild admixed
+P100A2_L1P18	V1 - P.West_Eur	V5 - West_Eur
+P35D2_L1P20	V1 - P.West_Eur	V5 - West_Eur
+D01	V3 - P.Aus	wild-wild admixed
+D07	V3 - P.Aus	V1 - P.Aus
+D09	V3 - P.Aus	V1 - P.Aus
+E07	V3 - P.Aus	V1 - P.Aus
+F02	V3 - P.Aus	V1 - P.Aus
+F07	V3 - P.Aus	V1 - P.Aus
+P43C2_L1P15	V3 - P.Aus	V1 - P.Aus
+P35A3_L1P37	V1 - P.West_Eur	V5 - West_Eur
+P34C2_L1P29	V3 - P.Aus	V1 - P.Aus
+P43B4_L1P5	V3 - P.Aus	V1 - P.Aus
+STO-01_ACAGTG	V3 - P.Aus	V1 - P.Aus
+P47B2_L1P7	V4 - P.Est_Fr	V2 - P.Est_FR
+P53A2_L1P13	V4 - P.Est_Fr	V2 - P.Est_FR
+STO-28_GCCAAT	V5 - P.Rom	V4 - P.Rom
+C09	V3 - P.Aus	V1 - P.Aus
+D19	V3 - P.Aus	V1 - P.Aus
+E04	V3 - P.Aus	V1 - P.Aus
+E06	V3 - P.Aus	V1 - P.Aus
+E17	V3 - P.Aus	V1 - P.Aus
+F08	V3 - P.Aus	V1 - P.Aus
+syl_be_60	crops-wild admixed	crops-wild admixed
+syl_be_93	crops-wild admixed	crops-wild admixed
+syl_be_54	V5 - P.Rom	V4 - P.Rom
+D10	crops-wild admixed	crops-wild admixed
+P38B4_L1P48	crops-wild admixed FS	crops-wild admixed FS
+E15	V1 - P.West_Eur	V5 - West_Eur
+E16	V1 - P.West_Eur	V5 - West_Eur
+P35B2_L1P41	V3 - P.Aus	V1 - P.Aus
+P78D1_L1P1	V6 - P.Lor	V6 - P.Lor
+P1A1_L1P49	crops-wild admixed FS	crops-wild admixed FS
+A035	V1 - P.West_Eur	V5 - West_Eur
+A040	V1 - P.West_Eur	V5 - West_Eur
+C02	V1 - P.West_Eur	V5 - West_Eur
+C03	V1 - P.West_Eur	V5 - West_Eur
+P12A5_L1P34	V1 - P.West_Eur	V5 - West_Eur
+P12B1_L1P44	V1 - P.West_Eur	V5 - West_Eur
+P42D1_L1P19	crops-wild admixed	crops-wild admixed
+D05	V1 - P.West_Eur	V5 - West_Eur
+D08	V1 - P.West_Eur	V5 - West_Eur
+E14	V1 - P.West_Eur	V5 - West_Eur
+P102A5_L1P16	V5 - P.Rom	V4 - P.Rom
+D16	V1 - P.West_Eur	V5 - West_Eur
+E08	V1 - P.West_Eur	V5 - West_Eur
+E18	V1 - P.West_Eur	V5 - West_Eur
+F03	V1 - P.West_Eur	V5 - West_Eur
+P49D3_L1P36	V3 - P.Aus	V1 - P.Aus
+P64B3_L1P28	wild-wild admixed	V6 - P.Lor
+P2B1_L1P28	V3 - P.Aus	V1 - P.Aus
+D06	crops-wild admixed	crops-wild admixed
+C06	V1 - P.West_Eur	wild-wild admixed
+P68A2_L1P39	V4 - P.Est_Fr	V2 - P.Est_FR
+P70B3_L1P25	V6 - P.Lor	V6 - P.Lor
+jura-22_CAGATC	V3 - P.Aus	V1 - P.Aus
+D12	crops-wild admixed	crops-wild admixed
+T10	crops-wild admixed	crops-wild admixed
+P43A4_L1P50	V3 - P.Aus	V1 - P.Aus
+C07	crops-wild admixed	crops-wild admixed
+F10	crops-wild admixed	crops-wild admixed
+P55C4_L1P42	crops-wild admixed FS	crops-wild admixed FS
+P105B5_L1P11	V1 - P.West_Eur	V5 - West_Eur
+P64C4_L1P17	V1 - P.West_Eur	wild-wild admixed
+P67B5_L1P12	V4 - P.Est_Fr	V2 - P.Est_FR
+C08	wild-wild admixed	V6 - P.Lor
+E11	wild-wild admixed	V6 - P.Lor
+E19	wild-wild admixed	wild-wild admixed
+P79B5_L1P10	crops-wild admixed	crops-wild admixed
+P71A1_L1P27	V4 - P.Est_Fr	V2 - P.Est_FR
+D11	V6 - P.Lor	V6 - P.Lor
+E10	V6 - P.Lor	V6 - P.Lor
+E13	V6 - P.Lor	V6 - P.Lor
+F01	V1 - P.West_Eur	V5 - West_Eur
+P46C2_L1P6	V3 - P.Aus	V1 - P.Aus
+P40D4_L1P14	crops-wild admixed	crops-wild admixed
+D02	crops-wild admixed	crops-wild admixed
+D03	crops-wild admixed	crops-wild admixed
+D04	crops-wild admixed	crops-wild admixed
+D13	crops-wild admixed	crops-wild admixed
+F09	crops-wild admixed	crops-wild admixed
+P58D1_L1P47	crops-wild admixed	crops-wild admixed
+D15	crops-wild admixed snmf	crops-wild admixed snmf
+P104C3_L1P38	V5 - P.Rom	V4 - P.Rom
+P65B3_L1P3	wild-wild admixed	V6 - P.Lor
+E03	crops-wild admixed	crops-wild admixed
+E05	crops-wild admixed	crops-wild admixed
+F05	crops-wild admixed	crops-wild admixed
+P59B3_L1P43	crops-wild admixed	crops-wild admixed
+X9651	crops-wild admixed	crops-wild admixed
+858C_CTTGTA	crops-wild admixed FS	crops-wild admixed FS
+A037	crops-wild admixed FS	crops-wild admixed FS
+C05	crops-wild admixed FS	crops-wild admixed FS
+A038	V1 - P.West_Eur	wild-wild admixed
+A039	V1 - P.West_Eur	wild-wild admixed
+C04	V1 - P.West_Eur	wild-wild admixed
+P25A3_L1P9	V1 - P.West_Eur	V5 - West_Eur
+E12	crops-wild admixed	crops-wild admixed
+P42B3_L4P27	crops-wild admixed	crops-wild admixed
+P48B1_L6P44	crops-wild admixed	crops-wild admixed
+P55C2_L1P35	crops-wild admixed	crops-wild admixed
+P56A2_L7P40	crops-wild admixed	crops-wild admixed
+P68C3_L8P25	crops-wild admixed	crops-wild admixed
+P67D3_L1P2	crops-wild admixed FS	crops-wild admixed FS
+P71A4_L4P9	V1 - P.West_Eur	V5 - West_Eur
+P79D2_L2P15	V3 - P.Aus	V1 - P.Aus
+E02	V4 - P.Est_Fr	V2 - P.Est_FR
+F20	V4 - P.Est_Fr	V2 - P.Est_FR
+P40C1_L7P33	V4 - P.Est_Fr	V2 - P.Est_FR
+P41C2_L4P15	V5 - P.Rom	V4 - P.Rom
+P40C3_L3P40	wild-wild admixed	wild-wild admixed
+A031	crops-wild admixed	crops-wild admixed
+F06	crops-wild admixed	crops-wild admixed
+P42A2_L1P31	crops-wild admixed	crops-wild admixed
+A033	V5 - P.Rom	V4 - P.Rom
+P103D2_L1P46	crops-wild admixed	crops-wild admixed
+P104D5_L1P30	crops-wild admixed	crops-wild admixed
+P39A2_L1P40	crops-wild admixed	crops-wild admixed
+C10	V5 - P.Rom	V4 - P.Rom
+D18	V5 - P.Rom	V4 - P.Rom
+D20	V5 - P.Rom	V4 - P.Rom
+E09	V5 - P.Rom	V4 - P.Rom
+P45A4_L1P32	crops-wild admixed	crops-wild admixed
+E20	V5 - P.Rom	V4 - P.Rom
+D17	crops-wild admixed	crops-wild admixed
+T08	V1 - P.West_Eur	wild-wild admixed
+P41C3_L1P4	V5 - P.Rom	V4 - P.Rom
+T09	crops-wild admixed	crops-wild admixed
+D14	V5 - P.Rom	V4 - P.Rom
+E01	V5 - P.Rom	V4 - P.Rom
+F04	V5 - P.Rom	V4 - P.Rom
+P49B5_L1P8	V1 - P.West_Eur	V5 - West_Eur
+syl_es_F	crops-wild admixed FS	crops-wild admixed FS
+syl_es_D	V1 - P.West_Eur	wild-wild admixed
+syl_es_B	wild-wild admixed	wild-wild admixed
