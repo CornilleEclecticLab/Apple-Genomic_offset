@@ -1,0 +1,4 @@
+/scratch/mc10739/01-SNPs_calling_filtering/SNPs_filtering/out/s08_bis/chr_concat.geno20_maf005.anno.syn_nonsyn_filtered.vcf.gz
+/scratch/mc10739/01-SNPs_calling_filtering/SNPs_filtering/out/s08_bis/chr_concat.geno20_maf005.anno.syno.LDpruned_filtered.vcf.gz
+/scratch/mc10739/01-SNPs_calling_filtering/SNPs_filtering/out/s08_bis/chr_concat.geno20_maf005.anno.syno_filtered.vcf.gz
+/scratch/mc10739/01-SNPs_calling_filtering/SNPs_filtering/out/s08_bis/chr_concat.geno20_maf005.anno_filtered.vcf.gz
