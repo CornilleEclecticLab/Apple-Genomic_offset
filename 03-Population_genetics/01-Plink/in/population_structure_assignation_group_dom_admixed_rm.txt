@@ -1,0 +1,89 @@
+Seq_ID	Cluster_FS	Cluster_snmf
+P100A2_L1P18	V1 - P.West_Eur	V5 - West_Eur
+P35D2_L1P20	V1 - P.West_Eur	V5 - West_Eur
+P35A3_L1P37	V1 - P.West_Eur	V5 - West_Eur
+E15	V1 - P.West_Eur	V5 - West_Eur
+E16	V1 - P.West_Eur	V5 - West_Eur
+A035	V1 - P.West_Eur	V5 - West_Eur
+A040	V1 - P.West_Eur	V5 - West_Eur
+C02	V1 - P.West_Eur	V5 - West_Eur
+C03	V1 - P.West_Eur	V5 - West_Eur
+P12A5_L1P34	V1 - P.West_Eur	V5 - West_Eur
+P12B1_L1P44	V1 - P.West_Eur	V5 - West_Eur
+D05	V1 - P.West_Eur	V5 - West_Eur
+D08	V1 - P.West_Eur	V5 - West_Eur
+E14	V1 - P.West_Eur	V5 - West_Eur
+D16	V1 - P.West_Eur	V5 - West_Eur
+E08	V1 - P.West_Eur	V5 - West_Eur
+E18	V1 - P.West_Eur	V5 - West_Eur
+F03	V1 - P.West_Eur	V5 - West_Eur
+C06	V1 - P.West_Eur	wild-wild admixed
+P105B5_L1P11	V1 - P.West_Eur	V5 - West_Eur
+P64C4_L1P17	V1 - P.West_Eur	wild-wild admixed
+F01	V1 - P.West_Eur	V5 - West_Eur
+A038	V1 - P.West_Eur	wild-wild admixed
+A039	V1 - P.West_Eur	wild-wild admixed
+C04	V1 - P.West_Eur	wild-wild admixed
+P25A3_L1P9	V1 - P.West_Eur	V5 - West_Eur
+P71A4_L4P9	V1 - P.West_Eur	V5 - West_Eur
+T08	V1 - P.West_Eur	wild-wild admixed
+P49B5_L1P8	V1 - P.West_Eur	V5 - West_Eur
+syl_es_D	V1 - P.West_Eur	wild-wild admixed
+D01	V3 - P.Aus	wild-wild admixed
+D07	V3 - P.Aus	V1 - P.Aus
+D09	V3 - P.Aus	V1 - P.Aus
+E07	V3 - P.Aus	V1 - P.Aus
+F02	V3 - P.Aus	V1 - P.Aus
+F07	V3 - P.Aus	V1 - P.Aus
+P43C2_L1P15	V3 - P.Aus	V1 - P.Aus
+P34C2_L1P29	V3 - P.Aus	V1 - P.Aus
+P43B4_L1P5	V3 - P.Aus	V1 - P.Aus
+STO-01_ACAGTG	V3 - P.Aus	V1 - P.Aus
+C09	V3 - P.Aus	V1 - P.Aus
+D19	V3 - P.Aus	V1 - P.Aus
+E04	V3 - P.Aus	V1 - P.Aus
+E06	V3 - P.Aus	V1 - P.Aus
+E17	V3 - P.Aus	V1 - P.Aus
+F08	V3 - P.Aus	V1 - P.Aus
+P35B2_L1P41	V3 - P.Aus	V1 - P.Aus
+P49D3_L1P36	V3 - P.Aus	V1 - P.Aus
+P2B1_L1P28	V3 - P.Aus	V1 - P.Aus
+jura-22_CAGATC	V3 - P.Aus	V1 - P.Aus
+P43A4_L1P50	V3 - P.Aus	V1 - P.Aus
+P46C2_L1P6	V3 - P.Aus	V1 - P.Aus
+P79D2_L2P15	V3 - P.Aus	V1 - P.Aus
+P47B2_L1P7	V4 - P.Est_Fr	V2 - P.Est_FR
+P53A2_L1P13	V4 - P.Est_Fr	V2 - P.Est_FR
+P68A2_L1P39	V4 - P.Est_Fr	V2 - P.Est_FR
+P67B5_L1P12	V4 - P.Est_Fr	V2 - P.Est_FR
+P71A1_L1P27	V4 - P.Est_Fr	V2 - P.Est_FR
+E02	V4 - P.Est_Fr	V2 - P.Est_FR
+F20	V4 - P.Est_Fr	V2 - P.Est_FR
+P40C1_L7P33	V4 - P.Est_Fr	V2 - P.Est_FR
+STO-28_GCCAAT	V5 - P.Rom	V4 - P.Rom
+syl_be_54	V5 - P.Rom	V4 - P.Rom
+P102A5_L1P16	V5 - P.Rom	V4 - P.Rom
+P104C3_L1P38	V5 - P.Rom	V4 - P.Rom
+P41C2_L4P15	V5 - P.Rom	V4 - P.Rom
+A033	V5 - P.Rom	V4 - P.Rom
+C10	V5 - P.Rom	V4 - P.Rom
+D18	V5 - P.Rom	V4 - P.Rom
+D20	V5 - P.Rom	V4 - P.Rom
+E09	V5 - P.Rom	V4 - P.Rom
+E20	V5 - P.Rom	V4 - P.Rom
+P41C3_L1P4	V5 - P.Rom	V4 - P.Rom
+D14	V5 - P.Rom	V4 - P.Rom
+E01	V5 - P.Rom	V4 - P.Rom
+F04	V5 - P.Rom	V4 - P.Rom
+P78D1_L1P1	V6 - P.Lor	V6 - P.Lor
+P70B3_L1P25	V6 - P.Lor	V6 - P.Lor
+D11	V6 - P.Lor	V6 - P.Lor
+E10	V6 - P.Lor	V6 - P.Lor
+E13	V6 - P.Lor	V6 - P.Lor
+P64B3_L1P28	wild-wild admixed	V6 - P.Lor
+C08	wild-wild admixed	V6 - P.Lor
+E11	wild-wild admixed	V6 - P.Lor
+E19	wild-wild admixed	wild-wild admixed
+P65B3_L1P3	wild-wild admixed	V6 - P.Lor
+P40C3_L3P40	wild-wild admixed	wild-wild admixed
+syl_es_B	wild-wild admixed	wild-wild admixed
