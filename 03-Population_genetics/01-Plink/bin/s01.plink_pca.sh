@@ -9,7 +9,7 @@
 module load all gencore/3
 module load plink/1.9
 
-PROJECT="dom_rm"
+PROJECT="dom_admixed_rm"
 OUTPUT_DIR="./out/${PROJECT}/s01.plink_pca"
 INPUT_FILE="../00-File_preparation/out/${PROJECT}/s01.filter_vcf/chr_concat.geno20_maf005.anno.syno.LDpruned_filtered_${PROJECT}"
 
