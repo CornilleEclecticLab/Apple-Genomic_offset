@@ -14,10 +14,10 @@ script_path = os.path.dirname(os.path.realpath(sys.argv[0]))
 bin_dir = script_path
 work_dir = os.path.dirname(script_path)
 input_dir = os.path.join(work_dir, 'in')
-Project = "dom_rm"
+Project = "dom_admixed_rm"
 output_dir = os.path.join(work_dir, 'out', Project, "s02.split_vcf_by_chr")
 sub_script_dir = os.path.join(bin_dir, f"{script_basename}_{Project}")
-in_vcf = f"./out/{Project}/s01.filter_vcf/chr_concat.geno20_maf005.anno.syno.LDpruned_filtered_{Project}.vcf.gz"
+in_vcf = f"./out/{Project}/s01.filter_vcf/chr_concat.geno20_maf005.anno_filtered_{Project}.vcf.gz"
 
 # Ensure directories exist
 os.makedirs(output_dir, exist_ok=True)
@@ -40,7 +40,7 @@ header = f"""#!/usr/bin/env bash
 
 for chr in chr_list:
     sub_script_base = f"{script_basename}.{chr}"
-    out_vcf = os.path.join(output_dir, f"chr_{chr}.geno20_maf005.anno.syno.LDpruned_filtered_{Project}.vcf.gz")
+    out_vcf = os.path.join(output_dir, f"chr_{chr}.geno20_maf005.anno_filtered_{Project}.vcf.gz")
     script_path = os.path.join(sub_script_dir, sub_script_base + '.sh')
     with open(script_path, 'w') as fo:
         fo.write(header)
