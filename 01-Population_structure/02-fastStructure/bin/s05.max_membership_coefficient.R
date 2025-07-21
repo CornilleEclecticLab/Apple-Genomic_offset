@@ -96,9 +96,9 @@ for (file in files_ordered) {
   print(fig)
   plots_list[[file]] <- fig
 }
-combined_plots <- grid.arrange(grobs = plots_list, ncol = 3)
+combined_plots <- grid.arrange(grobs = plots_list, ncol = 5)
 #plot(combined_plots[1,2]) #K=3
-ggsave(paste0(OUT_FOLDER,"/Max_membership_distribution.png"), combined_plots, device = "png",dpi = 300)
+ggsave(paste0(OUT_FOLDER,"/Max_membership_distribution.png"), combined_plots, device = "png",dpi = 300, width = 12, height = 8 )
 
 
 
