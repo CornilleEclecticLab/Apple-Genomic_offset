@@ -1,4 +1,0 @@
-plink --bfile /scratch/mc10739/01-SNPs_calling_filtering/SNPs_filtering/out/s08_bis/chr_concat.geno20_maf005.anno.syno.LDpruned_filtered \
-      --distance square --chr-set 17 no-xy
-      --out out/All_data_wo_orientalis/s01.plink_distance/chr_concat.geno20_maf005.anno.syno.LDpruned_filtered
-
