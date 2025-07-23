@@ -1,0 +1,92 @@
+"Seq_ID","individual_ID","Sample.source","Country","Country.code..ISO.3166.","Site","Latitude","Longitude","species","Order_vcf","Order_plot","V1","V2","V3","V4"
+"syl_be_54","syl_be_54","This study","Belgique","BEL","syl_be","50,80","4,71","Malus sylvestris",89,1,0.9543,0.0443,5e-04,9e-04
+"syl_be_60","syl_be_60","This study","Belgique","BEL","syl_be","50,80","4,71","Malus sylvestris",90,2,0.9406,0.0515,0.0078,1e-04
+"syl_be_93","syl_be_93","This study","Belgique","BEL","syl_be","50,81","4,72","Malus sylvestris",91,3,0.9997,3e-04,0,0
+"F01","P92D3","Chen et al.","France","FRA","WE","50,77","1,75","Malus sylvestris",42,4,1,0,0,0
+"A038","P22C4","Chen et al.","France","FRA","Yv","48,43","2,63","Malus sylvestris",5,5,0.9985,0.0015,0,0
+"A039","P23C4","Chen et al.","France","FRA","Yv","48,43","2,63","Malus sylvestris",6,6,0.9965,1e-04,0.0035,0
+"P25A3_L1P9","P25A3","This study","France","FRA","Yv","48,44","2,64","Malus sylvestris",56,7,0.9958,0.0035,7e-04,0
+"A037","P22C1","Chen et al.","France","FRA","Yv","48,44","2,64","Malus sylvestris",4,8,0.9656,0.0343,0,1e-04
+"C04","P30B5","Chen et al.","France","FRA","Yv","48,44","2,64","Malus sylvestris",10,9,0.9643,0.0154,0.0203,0
+"858C_CTTGTA","858C","Chen et al.","France","FRA","Yv","48,46","2,67","Malus sylvestris",1,10,0.9408,0.0403,0.0171,0.0018
+"P65B3_L1P3","P65B3","This study","France","FRA","DeSe","46,69","-0,05","Malus sylvestris",76,11,0.9813,0.015,0.0037,0
+"P71A1_L1P27","P71A1","This study","France","FRA","Lor","48,76","6,34","Malus sylvestris",80,12,0.95,0,0,0.05
+"P79B5_L1P10","P79B5","This study","France","FRA","Lor","48,76","6,34","Malus sylvestris",83,13,0.95,0,0,0.05
+"D11","P58D2","Chen et al.","France","FRA","Lor","48,74","6,36","Malus sylvestris",19,14,0.95,0,0,0.05
+"E10","P77D2","Chen et al.","France","FRA","Lor","48,74","6,36","Malus sylvestris",32,15,0.9499,1e-04,0,0.05
+"E13","P81B2","Chen et al.","France","FRA","Lor","48,74","6,36","Malus sylvestris",34,16,0.9474,0.0026,0,0.05
+"P40D4_L1P14","P40D4","This study","France","FRA","BasRh","48,73","7,42","Malus sylvestris",64,17,0.8513,0.1473,0,0.0014
+"P67B5_L1P12","P67B5","This study","France","FRA","Jur","46,55","5,78","Malus sylvestris",77,18,0.8812,0.1186,0,3e-04
+"C08","P34C3","Chen et al.","France","FRA","Jur","46,55","5,78","Malus sylvestris",11,19,0.851,0.1485,0,5e-04
+"E19","P89B4","Chen et al.","France","FRA","Jur","46,53","5,79","Malus sylvestris",40,20,0.8479,0.1516,0,5e-04
+"P64C4_L1P17","P64C4","This study","France","FRA","Jur","46,61","5,91","Malus sylvestris",75,21,0.8682,0.1315,0,3e-04
+"E11","P77A1","Chen et al.","France","FRA","Jur","46,61","5,91","Malus sylvestris",33,22,0.8694,0.1306,0,0
+"jura-22_CAGATC","jura-22","Chen et al.","France","FRA","Jur","47,50","4,58","Malus sylvestris",88,23,0.8027,0.1959,0,0.0014
+"P12B1_L1P44","P12B1","This study","Denmark","DNK","Hvol","57,06","9,56","Malus sylvestris",54,24,1,0,0,0
+"A035","P18D2","Chen et al.","Denmark","DNK","Hvol","57,06","9,56","Malus sylvestris",3,25,1,0,0,0
+"C02","P12A1","Chen et al.","Denmark","DNK","Hvol","57,06","9,56","Malus sylvestris",8,26,1,0,0,0
+"A040","P24D3","Chen et al.","Denmark","DNK","Hvol","57,07","9,56","Malus sylvestris",7,27,1,0,0,0
+"C03","P26B3","Chen et al.","Denmark","DNK","Hvol","57,07","9,56","Malus sylvestris",9,28,1,0,0,0
+"P12A5_L1P34","P12A5","This study","Denmark","DNK","Hvol","57,07","9,56","Malus sylvestris",53,29,1,0,0,0
+"P2B1_L1P28","P2B1","This study","France","FRA","Skov","57,06","9,56","Malus sylvestris",57,30,1,0,0,0
+"P1A1_L1P49","P1A1","This study","Denmark","DNK","Hvol","57,07","9,56","Malus sylvestris",55,31,1,0,0,0
+"E08","P74C4","Chen et al.","Denmark","DNK","Skov","57,12","9,75","Malus sylvestris",30,32,1,0,0,0
+"F03","P93C1","Chen et al.","Denmark","DNK","Skov","57,12","9,75","Malus sylvestris",44,33,1,0,0,0
+"D16","P65D4","Chen et al.","Denmark","DNK","Skov","57,12","9,75","Malus sylvestris",21,34,1,0,0,0
+"E18","P84D1","Chen et al.","Denmark","DNK","Skov","57,12","9,75","Malus sylvestris",39,35,1,0,0,0
+"P49D3_L1P36","P49D3","This study","Denmark","DNK","Skov","57,12","9,75","Malus sylvestris",72,36,1,0,0,0
+"P78D1_L1P1","P78D1_doublon","This study","Denmark","DNK","Aaby","57,19","9,76","Malus sylvestris",82,37,1,0,0,0
+"P35B2_L1P41","P35B2","This study","Denmark","DNK","Aaby","57,19","9,76","Malus sylvestris",60,38,1,0,0,0
+"E16","P84C5","Chen et al.","Denmark","DNK","Aaby","57,19","9,76","Malus sylvestris",37,39,1,0,0,0
+"E15","P83B3","Chen et al.","Denmark","DNK","Aaby","57,19","9,76","Malus sylvestris",36,40,1,0,0,0
+"P38B4_L1P48","P38B4","This study","Denmark","DNK","Aaby","57,19","9,76","Malus sylvestris",62,41,1,0,0,0
+"D08","P51A1","Chen et al.","Denmark","DNK","Norh","57,16","9,85","Malus sylvestris",17,42,1,0,0,0
+"P102A5_L1P16","P102A5","This study","Denmark","DNK","Norh","57,16","9,85","Malus sylvestris",50,43,1,0,0,0
+"D05","P39B3","Chen et al.","Denmark","DNK","Norh","57,16","9,86","Malus sylvestris",15,44,1,0,0,0
+"E14","P82A1","Chen et al.","Denmark","DNK","Norh","57,16","9,86","Malus sylvestris",35,45,1,0,0,0
+"P40C3_L3P40","P40C3","This study","Italy","ITA","AlDom","41,79","13,65","Malus sylvestris",63,46,0,0,1,0
+"P48B1_L6P44","P48B1","This study","Italy","ITA","AlDom","41,79","13,65","Malus sylvestris",71,47,0,0,1,0
+"P55C2_L1P35","P55C2","This study","Italy","ITA","AlDom","41,79","13,65","Malus sylvestris",74,48,0.0017,0,0.9983,0
+"P67D3_L1P2","P67D3","This study","Italy","ITA","AlDom","41,79","13,65","Malus sylvestris",78,49,0,0,1,0
+"P68C3_L8P25","P68C3","This study","Italy","ITA","AlDom","41,79","13,65","Malus sylvestris",79,50,0,0,1,0
+"P71A4_L4P9","P71A4","This study","Italy","ITA","AlDom","41,79","13,65","Malus sylvestris",81,51,0.0016,0,0.9984,0
+"E02","P71D2","Chen et al.","Italy","ITA","AlDom","41,79","13,65","Malus sylvestris",26,52,0.0051,0,0.9949,0
+"F20","P39A1","Chen et al.","Italy","ITA","AlDom","41,79","13,65","Malus sylvestris",48,53,0,0,1,0
+"C09","P34D1","Chen et al.","Austria","AUT","STO","47,33","14,45","Malus sylvestris",12,54,0.0478,0.9522,0,0
+"D19","P67A1","Chen et al.","Austria","AUT","STO","47,33","14,45","Malus sylvestris",23,55,0.002,0.998,0,0
+"E04","P71A5","Chen et al.","Austria","AUT","STO","47,33","14,45","Malus sylvestris",27,56,0.0136,0.9864,0,0
+"E06","P72A4","Chen et al.","Austria","AUT","STO","47,33","14,45","Malus sylvestris",28,57,0.0036,0.9964,0,0
+"E17","P84D2","Chen et al.","Austria","AUT","STO","47,33","14,45","Malus sylvestris",38,58,0.0028,0.9972,0,0
+"F08","P99A5","Chen et al.","Austria","AUT","STO","47,33","14,45","Malus sylvestris",47,59,0.0021,0.9979,0,0
+"P34C2_L1P29","P34C2","This study","Austria","AUT","STO","48,37","16,19","Malus sylvestris",58,60,0.0028,0.9971,0,0
+"P35A3_L1P37","P35A3","This study","Austria","AUT","STO","48,37","16,19","Malus sylvestris",59,61,0.0042,0.9958,0,0
+"P43B4_L1P5","P43B4","This study","Austria","AUT","STO","48,37","16,19","Malus sylvestris",67,62,0.0301,0.9699,0,0
+"P47B2_L1P7","P47B2","This study","Austria","AUT","STO","48,37","16,19","Malus sylvestris",70,63,0.0051,0.9949,0,0
+"P53A2_L1P13","P53A2","This study","Austria","AUT","STO","48,37","16,19","Malus sylvestris",73,64,0.0021,0.9978,0,0
+"STO-01_ACAGTG","STO-01","Chen et al.","Austria","AUT","STO","48,39","16,22","Malus sylvestris",84,65,0.0026,0.9974,0,0
+"STO-28_GCCAAT","STO-28","Chen et al.","Austria","AUT","STO","48,39","16,22","Malus sylvestris",85,66,0.0082,0.9918,0,0
+"F07","P97B5","Chen et al.","Austria","AUT","NPDA","48,13","16,68","Malus sylvestris",46,67,0.002,0.998,0,0
+"P44B1_L1P23","P44B1","This study","Austria","AUT","NPDA","48,13","16,68","Malus sylvestris",69,68,0.0036,0.9964,0,0
+"P35D2_L1P20","P35D2","This study","Austria","AUT","NPDA","48,13","16,69","Malus sylvestris",61,69,7e-04,0.9993,0,0
+"D07","P51C3","Chen et al.","Austria","AUT","NPDA","48,13","16,69","Malus sylvestris",16,70,6e-04,0.9994,0,0
+"E07","P73C3","Chen et al.","Austria","AUT","NPDA","48,13","16,69","Malus sylvestris",29,71,0.0019,0.9981,0,0
+"D01","P35A1","Chen et al.","Austria","AUT","NPDA","48,13","16,69","Malus sylvestris",14,72,0.0487,0.9219,0,0.0294
+"P100A2_L1P18","P100A2","This study","Austria","AUT","NPDA","48,14","16,70","Malus sylvestris",49,73,0.0028,0.9971,0,1e-04
+"P43C2_L1P15","P43C2","This study","Austria","AUT","NPDA","48,15","16,88","Malus sylvestris",68,74,0.0024,0.9976,0,0
+"F02","P93A4","Chen et al.","Austria","AUT","NPDA","48,15","16,88","Malus sylvestris",43,75,0.0041,0.9914,0,0.0045
+"D09","P54A5","Chen et al.","Austria","AUT","NPDA","48,15","16,88","Malus sylvestris",18,76,0.0052,0.9938,0,0.0011
+"P103D2_L1P46","P103D2","This study","Romania","ROU","Site1","46,77","23,31","Malus sylvestris",51,77,0,0.05,0,0.95
+"C10","P34B1","Chen et al.","Romania","ROU","Site1","46,77","23,31","Malus sylvestris",13,78,0,0.05,0,0.95
+"D18","P66C5","Chen et al.","Romania","ROU","Site1","46,76","23,31","Malus sylvestris",22,79,0,0.05,0,0.95
+"P104D5_L1P30","P104D5","This study","Romania","ROU","Site1","46,76","23,31","Malus sylvestris",52,80,0,0.0502,0,0.9498
+"D20","P69D1","Chen et al.","Romania","ROU","Site1","46,76","23,32","Malus sylvestris",24,81,0.0497,0.0514,0.0019,0.897
+"F04","P95C5","Chen et al.","Romania","ROU","Site2","46,76","23,32","Malus sylvestris",45,82,0,0.05,0,0.95
+"D14","P63C3","Chen et al.","Romania","ROU","Site2","46,76","23,33","Malus sylvestris",20,83,1e-04,0.0547,0,0.9452
+"E01","P70C1","Chen et al.","Romania","ROU","Site2","46,75","23,33","Malus sylvestris",25,84,0,0.05,0,0.95
+"A033","P15B4","Chen et al.","Romania","ROU","Site0","46,82","23,36","Malus sylvestris",2,85,1e-04,0.0511,0,0.9489
+"P42A2_L1P31","P42A2","This study","Romania","ROU","Site0","46,82","23,37","Malus sylvestris",66,86,0,0.05,0,0.95
+"E09","P76A3","Chen et al.","Romania","ROU","Site13","46,73","24,93","Malus sylvestris",31,87,0,0.05,0,0.95
+"T09","P95C4","Chen et al.","Romania","ROU","Site16","46,21","24,94","Malus sylvestris",87,88,0,0.05,0,0.95
+"P41C3_L1P4","P41C3","This study","Romania","ROU","Site15","46,65","25,04","Malus sylvestris",65,89,0,0.05,0,0.95
+"E20","P90A1","Chen et al.","Romania","ROU","Site14","46,62","25,04","Malus sylvestris",41,90,0,0.05,0,0.95
+"T08","P69A1","Chen et al.","Romania","ROU","Site15","46,65","25,04","Malus sylvestris",86,91,0,0.05,0,0.95
