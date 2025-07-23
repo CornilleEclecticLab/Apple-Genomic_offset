@@ -1,0 +1,9 @@
+# Inter file for fastStructure
+*.meanP
+*.meanQ
+*.varP
+*.varQ
+
+# err and out file from sbatch
+*.err
+*.out
