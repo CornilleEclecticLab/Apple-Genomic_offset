@@ -1,3 +1,8 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
 # Inter file for fastStructure
 *.meanP
 *.meanQ
