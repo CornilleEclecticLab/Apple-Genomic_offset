@@ -1,4 +1,5 @@
 library(vegan)
+library(dplyr)
 library(FactoMineR)
 library(corrplot)
 library(factoextra)
@@ -93,7 +94,7 @@ anova.cca(rda1, by="mar")
 extractAIC(rda1)
 
 #Runing best model
-rda2 <- capscale(gen_dist ~ Bio13_LGM + Bio6_LGM + Bio4_current, 
+rda2 <- capscale(gen_dist ~ Bio4_current, 
                  data=scale_env_pcnm_LGM)
 extractAIC(rda2)
 anova(rda2)

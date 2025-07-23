@@ -13,7 +13,7 @@ library(purrr)
 library(maps)
 library(gstat)
 
-Project = "dom_admixed_rm"
+Project = "dom_admixed_rm" #"dom_admixed_rm_pi_by_ind"
 out_folder = paste0("./out/",Project,"/s01.Metrics/")
 dir.create(out_folder, recursive = T)
 
@@ -22,6 +22,7 @@ dir.create(out_folder, recursive = T)
 # pi_folder = "output/avg_pi_Site_grouped_level_EC_syl.light.reformat/"
 pi_folder = paste0("../02-Pixy/out/",Project,"/s02.avg_value/")
 mean_coordinate = read.delim("./in/group_coordinate_dom_admixed_rm.txt", sep = "\t", dec = ",")
+#mean_coordinate = read.delim("./in/group_coordinate_dom_admixed_rm_pi_by_ind.txt", sep = "\t", dec = ",")
 summary(mean_coordinate)
 files = list.files(pi_folder, full.names = T, pattern = "pi")
 
