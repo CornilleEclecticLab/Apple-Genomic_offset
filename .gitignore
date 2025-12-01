@@ -2,6 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
+.vscode
 
 # Inter file for fastStructure
 *.meanP
@@ -12,3 +13,10 @@
 # err and out file from sbatch
 *.err
 *.out
+*.log
+*.csv
+*.tsv
+*.txt
+*.pdf
+*.png
+*.svg
