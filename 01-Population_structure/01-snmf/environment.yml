@@ -1,0 +1,14 @@
+name: r-snmf-env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - r-base>=4.3
+  - bioconductor-lea  # Explicit versioning is safer for snmf
+  - r-svglite
+  - r-gridextra
+  - r-tidyverse  # Includes dplyr, readr, tidyr, ggplot2, stringr
+  - r-scales
+  - r-tzdb
+  - r-ggrepel    # Added because we used it in your previous plot code!

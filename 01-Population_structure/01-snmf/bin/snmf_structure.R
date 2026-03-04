@@ -5,14 +5,15 @@
 
 rm(list = ls())
 
-library(LEA, lib='/home/mc10739/R/x86_64-conda-linux-gnu-library/4.4')
-library(tzdb, lib='/home/mc10739/R/x86_64-conda-linux-gnu-library/4.4')
-library(readr, lib='/home/mc10739/R/x86_64-conda-linux-gnu-library/4.4')
-library(dplyr, lib='/home/mc10739/R/x86_64-conda-linux-gnu-library/4.4')
-library(tidyr, lib='/home/mc10739/R/x86_64-conda-linux-gnu-library/4.4')
-library(scales, lib='/home/mc10739/R/x86_64-conda-linux-gnu-library/4.4')
-library(ggplot2, lib='/home/mc10739/R/x86_64-conda-linux-gnu-library/4.4')
-library(gridExtra, lib='/home/mc10739/R/x86_64-conda-linux-gnu-library/4.4')
+library(LEA)
+library(tzdb)
+library(readr)
+library(dplyr)
+library(tidyr)
+library(scales)
+library(ggplot2)
+library(gridExtra)
+library(svglite)
 
 # To use this file you need an lfmm file, a geno file, a env file for the actual environmental
 # situation and a env file for the environmental projection
@@ -113,7 +114,7 @@ print(best_run)
 
 barchart(
   project,
-  K = 7,
+  K = 5,
   run = best_run,
   border = NA,
   space = 0,
@@ -122,13 +123,13 @@ barchart(
   #xlab = "Individuals",
   #ylab = "Ancestry proportions",
   #main = paste("Ancestry matrix", "K =", i)
-  main = paste("K =", 7)
+  main = paste("K =", 5)
 ) -> bp
 print(bp$order)
 #
 list_accession_ordered <- list_accession %>%
-  mutate(Order = factor(Order_vcf_wo_orientalis, levels = bp$order)) %>%
-  arrange(Order_vcf_wo_orientalis)
+  mutate(Order = factor(Order_vcf, levels = bp$order)) %>%
+  arrange(Order_vcf)
 print(list_accession_ordered)
 
 
@@ -148,6 +149,7 @@ for (i in 1:max_K){
   get_Q = Q(project, K = i, run = best_run)
   get_Q_bind <- cbind(get_Q, list_accession_ordered)
   get_Q_bind <- get_Q_bind %>% arrange(Order_plot)
+  #print(get_Q_bind)
   
   # Identify V columns dynamically
   v_columns <- grep("^V", names(get_Q_bind), value = TRUE)
@@ -181,3 +183,5 @@ for (i in 1:max_K){
 combined_plots <- grid.arrange(grobs = plots_list, ncol = 1); plot(combined_plots)
 png_file <- paste0(fig.directory,"/SNPs_based_structure_",file_name,".png")
 ggsave(filename = png_file, plot = combined_plots, width = 8, height = 20, units = "in", dpi = 300)
+svg_file <- paste0(fig.directory, "/SNPs_based_structure_", file_name, ".svg")
+ggsave(filename = svg_file, plot = combined_plots, width = 8, height = 20, units = "in")
