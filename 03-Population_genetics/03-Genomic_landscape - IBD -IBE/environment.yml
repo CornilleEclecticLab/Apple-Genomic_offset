@@ -1,0 +1,57 @@
+name: r-spatial-env
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - r-base=4.3
+
+  # =========================
+  # Spatial and mapping
+  # =========================
+  - r-sf
+  - r-maps
+  - r-gstat
+  - r-elevatr
+  - r-rcolorbrewer
+
+  # Installed from R (not Conda):
+  # - tmap (>= 4.1)
+  # - raster
+
+  # =========================
+  # Data manipulation
+  # =========================
+  - r-dplyr
+  - r-purrr
+  - r-reshape2
+  - r-tidyverse
+  - r-data.table
+
+  # =========================
+  # Multivariate and statistics
+  # =========================
+  - r-vegan
+  - r-factominer
+  - r-factoextra
+  - r-corrplot
+
+  # =========================
+  # Visualization
+  # =========================
+  - r-ggplot2
+  - r-svglite
+  - r-ragg
+  - r-rgl
+  - r-plotly
+  - r-scatterplot3d
+
+  # =========================
+  # System libraries (spatial + OpenGL)
+  # =========================
+  - gdal
+  - geos
+  - proj
+  - udunits2
+  - mesa-libgl
+  - libglu

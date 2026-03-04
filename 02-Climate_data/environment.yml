@@ -1,0 +1,20 @@
+name: r-chelsa-env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+
+dependencies:
+  - r-base>=4.3
+
+  # Existing dependencies
+  - r-dplyr
+  - r-stringr
+  - r-raster
+  - r-rgdal
+
+  # New R packages
+  - r-corrplot
+  - r-factominer
+  - r-factoextra
+  - r-ggrepel
