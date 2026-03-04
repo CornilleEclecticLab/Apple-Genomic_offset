@@ -1,0 +1,23 @@
+name: r-go-env
+channels:
+  - bioconda
+  - conda-forge
+dependencies:
+  - r-base=4.4
+  - r-dplyr
+  - r-ggplot2
+  - r-stringr
+  - r-ggpubr
+  - r-ggupset
+  - r-RColorBrewer
+  - r-patchwork
+  - r-promises
+  - r-later
+
+  # Bioconductor (3.18)
+  - bioconductor-genomicranges
+  - bioconductor-biostrings
+  - bioconductor-clusterprofiler
+  - bioconductor-annotationdbi
+  - bioconductor-gosemsim
+  - bioconductor-enrichplot

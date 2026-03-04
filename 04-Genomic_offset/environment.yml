@@ -1,0 +1,55 @@
+name: r-lea-env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+
+dependencies:
+  # Base R
+  - r-base>=4.3
+
+  # Bioconductor core
+  - bioconductor-lea
+  - bioconductor-qvalue
+  - bioconductor-clusterProfiler
+  - bioconductor-enrichplot
+  - bioconductor-gosemsim
+
+  # Core tidyverse & plotting
+  - r-tidyverse
+  - r-dplyr
+  - r-readr
+  - r-tidyr
+  - r-stringr
+  - r-ggplot2
+  - r-scales
+  - r-ggrepel
+  - r-ggpubr
+  - r-patchwork
+  - r-ggupset
+
+  # Graphics & export
+  - r-ragg
+  - r-svglite
+  - r-gridextra
+  - r-gridgraphics
+  - r-RColorBrewer
+
+  # Population genetics / phylogenetics
+  - r-vcfR
+  - r-adegenet
+  - r-poppr
+  - r-phangorn
+
+  # Spatial stack
+  - libudunits2
+  - r-units
+  - r-sf
+  - r-fields
+  - r-maps
+  - r-rnaturalearth
+  - r-rnaturalearthdata
+
+  # Async / promises (required by some plotting & Shiny deps)
+  - r-promises>=1.5.0
+  - r-later
