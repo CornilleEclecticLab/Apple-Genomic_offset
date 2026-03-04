@@ -17,7 +17,13 @@ input_dir = os.path.join(work_dir, 'in')
 Project = "dom_admixed_rm"
 output_dir = os.path.join(work_dir, 'out', Project, "s02.split_vcf_by_chr")
 sub_script_dir = os.path.join(bin_dir, f"{script_basename}_{Project}")
-in_vcf = f"./out/{Project}/s01.filter_vcf/chr_concat.geno20_maf005.anno_filtered_{Project}.vcf.gz"
+#in_vcf = f"./out/{Project}/s01.filter_vcf/chr_concat.geno20_maf005.anno_filtered_{Project}.vcf.gz"
+in_vcf = "/scratch/mc10739/02-Wild_apple_genomic_offset/Apple-Genomic_offset/01-Population_structure/03-membership_coefficient_investigating/out/All_data_wo_orientalis/s04.filter_vcf/chr_concat.geno20_maf005.anno_dom_admixed_rm.vcf.gz"
+# for dom_admixed_rm
+basename = os.path.basename(in_vcf)
+basename_noext = os.path.splitext(os.path.splitext(basename)[0])[0]
+print(basename_noext)
+
 
 # Ensure directories exist
 os.makedirs(output_dir, exist_ok=True)
@@ -40,7 +46,7 @@ header = f"""#!/usr/bin/env bash
 
 for chr in chr_list:
     sub_script_base = f"{script_basename}.{chr}"
-    out_vcf = os.path.join(output_dir, f"chr_{chr}.geno20_maf005.anno_filtered_{Project}.vcf.gz")
+    out_vcf = os.path.join(output_dir, f"chr_{chr}.{basename_noext}.vcf.gz")
     script_path = os.path.join(sub_script_dir, sub_script_base + '.sh')
     with open(script_path, 'w') as fo:
         fo.write(header)
@@ -62,12 +68,12 @@ bcftools view \\
     -O z \\
     -o {out_vcf}
 
-tabix -p vcf {out_vcf}
+tabix -f -p vcf {out_vcf}
 """)
 
 # List all sub-scripts
 files = [f for f in os.listdir(sub_script_dir) if os.path.isfile(os.path.join(sub_script_dir, f))]
-output_file = os.path.join("./bin", f"list_split_sbatch_jobs_{Project}.txt")
+output_file = os.path.join("./bin", f"s02.split_by_chr_{Project}.command_to_run.txt")
 
 with open(output_file, "w") as f:
     for file in files:
