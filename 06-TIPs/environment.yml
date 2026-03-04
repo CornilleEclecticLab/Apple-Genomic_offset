@@ -1,0 +1,44 @@
+name: r-tips-env
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  # Python
+  - python=3.9
+  
+  # R base
+  - r-base>=4.3
+  
+  # R packages
+  - bioconductor-lea
+  - bioconductor-qvalue
+  - bioconductor-rgl
+  - r-svglite
+  - r-adegenet
+  - r-dplyr
+  - r-ggplot2
+  - r-ggrepel
+  - r-gridextra
+  - r-gridgraphics
+  - r-poppr
+  - r-ragg
+  - r-readr
+  - r-scales
+  - r-tidyr
+  - r-vcfR
+  - r-phangorn
+  - r-poppr
+  - r-RColorBrewer
+  - r-evaluate
+  - r-plotly
+  - r-scatterplot3d
+  
+  # System libraries for compiling R packages
+  - zlib
+  - libiconv
+  - libcurl
+  - openssl
+  - gcc_linux-64
+  - gxx_linux-64
+  - make
