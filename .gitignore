@@ -20,3 +20,13 @@
 *.pdf
 *.png
 *.svg
+*.txt
+*.geojson
+*.geno
+*.lfmm
+*.snmfProject
+*.bed
+*.bim
+*.fam
+*.eigenval
+*.eigenvec
