@@ -1,3 +1,5 @@
+rm(list=ls())
+
 library(dplyr)
 library(purrr)
 library(ggplot2)
@@ -18,7 +20,7 @@ create_folder <- function(path) {
   }
 }
 
-save_plot_png_svg <- function(plot, filename, width = 8, height = 6, dpi = 300) {
+save_plot_png_svg <- function(plot, filename, width = 10, height = 6, dpi = 300) {
   # Save as PNG
   ggsave(paste0(filename, ".png"), plot = plot, width = width, height = height, dpi = dpi, units = "in")
   
@@ -30,9 +32,10 @@ save_plot_png_svg <- function(plot, filename, width = 8, height = 6, dpi = 300) 
 
 
 #input
-Project="dom_admixed_rm"
+Project="full_genome_dom_admixed_rm_no_filter"
+# Project="dom_admixed_rm"
 fst_folder = paste0("../02-Pixy/out/",Project,"/s02.avg_value/")
-coordinate_folder = paste0("in/group_coordinate_",Project,".txt")
+coordinate_folder = paste0("./in/group_coordinate_",Project,".txt")
 out_folder=paste0("out/",Project)
 create_folder(out_folder)
 out_metrics=paste0(out_folder,"/s01.Metrics")
@@ -48,7 +51,8 @@ coord_order_long <- coordinate[order(coordinate$Longitude),]
 ##-------- FST
 fst_files = list.files(fst_folder, full.names = T, pattern = 'fst')
 combined_data <- fst_files %>%
-  map_df(~ read.csv(.))  # Use purrr::map_df to read and combine all files
+  map_df(~ read.csv(.)) %>% # Use purrr::map_df to read and combine all files 
+  mutate(avg_fst = ifelse(avg_fst < 0, 0, avg_fst))   # set negatives to 0
 
 #Group by pop and calculate the mean avg_pi for each pop
 site_means <- combined_data %>%
@@ -218,6 +222,7 @@ data_moins_fst_dist <- data_fst_dist %>%
 
 
 # Compute the correlation matrix
+cor.test(data_moins_fst_dist$moins_fst, data_moins_fst_dist$elevation) # correlation with elevation
 correlation_matrix <- cor(data, method = "pearson") # or "spearman" for rank correlation
 
 # Print the correlation matrix
@@ -271,3 +276,43 @@ plot3 <- ggplot(data_moins_fst_dist, aes(x = distance, y = moins_fst)) +
   annotate("text", x = -Inf, y = Inf, label = " (P = 0.0038)", vjust = 5, hjust = -0.1, size = 5, color = "navy")
 
 save_plot_png_svg(plot = plot3, filename = paste0(out_IBD, "/Figure_IBD_moins_fst_",Project))
+
+plot4 <- ggplot(data_moins_fst_dist, aes(x = elevation, y = moins_fst)) + 
+  geom_point(size = 5, alpha = 0.75, colour = "black",shape = 21, aes(fill = distance)) + 
+  geom_smooth(method = "lm", colour = "black", alpha = 0.2) + 
+  geom_text(aes(label = label), size = 2.5)+
+  labs(x = "Elevation difference (m)", y = "Fst/1-Fst", fill = "Distance (km)") + 
+  theme( axis.text.x = element_text(face = "bold",colour = "black", size = 12), 
+         axis.text.y = element_text(face = "bold", size = 11, colour = "black"), 
+         axis.title= element_text(face = "bold", size = 14, colour = "black"), 
+         panel.background = element_blank(), 
+         panel.border = element_rect(fill = NA, colour = "black"),
+         legend.position = "top",
+         legend.text = element_text(size = 10, face = "bold"),
+         legend.title = element_text(size = 11, face = "bold")) +
+  scale_fill_continuous(high = "navy", low = "skyblue") +
+  annotate("text", x = -Inf, y = Inf, label = " M.sylvestris", vjust = 2, hjust = -0.1, size = 5, color = "navy") +
+  annotate("text", x = -Inf, y = Inf, label = "Mantel r = 0.6088", vjust = 3.5, hjust = -0.1, size = 5, color = "navy") +
+  annotate("text", x = -Inf, y = Inf, label = " (P = 0.0038)", vjust = 5, hjust = -0.1, size = 5, color = "navy")
+
+save_plot_png_svg(plot = plot4, filename = paste0(out_IBD, "/Figure_IBD_elevation_moins_fst_",Project))
+
+plot5 <- ggplot(data_moins_fst_dist, aes(x = elevation, y = Fst)) + 
+  geom_point(size = 5, alpha = 0.75, colour = "black",shape = 21, aes(fill = distance)) + 
+  geom_smooth(method = "lm", colour = "black", alpha = 0.2) + 
+  geom_text(aes(label = label), size = 2.5)+
+  labs(x = "Elevation difference (m)", y = "Fst", fill = "Distance (km)") + 
+  theme( axis.text.x = element_text(face = "bold",colour = "black", size = 12), 
+         axis.text.y = element_text(face = "bold", size = 11, colour = "black"), 
+         axis.title= element_text(face = "bold", size = 14, colour = "black"), 
+         panel.background = element_blank(), 
+         panel.border = element_rect(fill = NA, colour = "black"),
+         legend.position = "top",
+         legend.text = element_text(size = 10, face = "bold"),
+         legend.title = element_text(size = 11, face = "bold")) +
+  scale_fill_continuous(high = "navy", low = "skyblue") +
+  annotate("text", x = -Inf, y = Inf, label = " M.sylvestris", vjust = 2, hjust = -0.1, size = 5, color = "navy") +
+  annotate("text", x = -Inf, y = Inf, label = "Mantel r = 0.6088", vjust = 3.5, hjust = -0.1, size = 5, color = "navy") +
+  annotate("text", x = -Inf, y = Inf, label = " (P = 0.0038)", vjust = 5, hjust = -0.1, size = 5, color = "navy")
+
+save_plot_png_svg(plot = plot4, filename = paste0(out_IBD, "/Figure_IBD_elevation_fst_",Project))

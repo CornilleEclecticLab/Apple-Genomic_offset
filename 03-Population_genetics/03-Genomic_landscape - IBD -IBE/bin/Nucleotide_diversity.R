@@ -13,7 +13,9 @@ library(purrr)
 library(maps)
 library(gstat)
 
-Project = "dom_admixed_rm" #"dom_admixed_rm_pi_by_ind"
+#Project = "dom_admixed_rm" #"dom_admixed_rm_pi_by_ind"
+# Project = "full_genome_dom_admixed_rm_no_filter" ##variant/invariant dataset
+Project = "full_genome_dom_admixed_rm_no_filter_pi_by_ind"
 out_folder = paste0("./out/",Project,"/s01.Metrics/")
 dir.create(out_folder, recursive = T)
 
@@ -21,7 +23,7 @@ dir.create(out_folder, recursive = T)
 #pi_folder = "output/avg_pi_Ind_level_EC_syl.light.reformat/" #ind level
 # pi_folder = "output/avg_pi_Site_grouped_level_EC_syl.light.reformat/"
 pi_folder = paste0("../02-Pixy/out/",Project,"/s02.avg_value/")
-mean_coordinate = read.delim("./in/group_coordinate_dom_admixed_rm.txt", sep = "\t", dec = ",")
+mean_coordinate = read.delim(paste0("./in/group_coordinate_",Project,".txt"), sep = "\t", dec = ",")
 #mean_coordinate = read.delim("./in/group_coordinate_dom_admixed_rm_pi_by_ind.txt", sep = "\t", dec = ",")
 summary(mean_coordinate)
 files = list.files(pi_folder, full.names = T, pattern = "pi")
@@ -36,9 +38,8 @@ head(combined_data)
 # Step 4: Group by Site and calculate the mean avg_pi for each site
 group_means <- combined_data %>%
   group_by(pop) %>%
-  summarise(mean_avg_pi = mean(avg_pi, na.rm = TRUE))%>%
+  summarise(mean_avg_pi = mean(avg_pi, na.rm = TRUE)) %>%
   rename(Group = pop)
-
 
 data_site <- merge(group_means, mean_coordinate, by = "Group")
 
@@ -65,15 +66,20 @@ europe_boundaries <- st_transform(europe_boundaries, crs = 4326)
 # Define a gradient color palette (using RColorBrewer)
 palette_gradient <- colorRampPalette(c("#1D60B4","#43CBF3", "#ADDA90","#F4E54E","#FFA43C", "#FF462B"))(100)
 
-# Plot using tmap
+# ============================
+# Plot using tmap (site-level dots)
+# ============================
 tm_shape(europe_boundaries) + 
   tm_polygons() +
   tm_shape(data_sf) +
-  tm_dots(col = "mean_avg_pi", palette = palette_gradient, auto.palette.mapping = FALSE,
-          title = "Sampled precipitation \n(in inches)", size = 0.7) +
-  tm_text("Group", just = "left", xmod = .5, size = 0.7) +
-  tm_legend(legend.outside = TRUE)
-
+  tm_dots(
+    col = "mean_avg_pi", 
+    palette = colorRampPalette(c("#1D60B4","#43CBF3", "#ADDA90","#F4E54E","#FFA43C", "#FF462B"))(100),  # FIX: use palette= function
+    title = "Sampled precipitation \n(in inches)", 
+    size = 0.7
+  ) +
+  tm_text("Group", just = "left", xmod = 0.5, size = 0.7) +
+  tm_layout(legend.outside = TRUE)
 
 # Define the bounding box of the European boundaries
 bbox <- st_bbox(europe_boundaries)
@@ -99,35 +105,43 @@ crs(r) <- st_crs(europe_boundaries)$proj4string
 # Clip raster to the European boundaries
 r.m <- mask(r, st_as_sf(europe_boundaries))
 
-
-# palette_gradient <- colorRampPalette(brewer.pal(9, "RdBu"))(100)
-#palette_gradient <- rainbow(100)
-
+# ============================
 # Save as PNG
+# ============================
 png(paste0(out_folder, "Nucleotide_diversity_across_europe_", Project, "_site_grouped_level.png"),
     width = 10, height = 10, units = "in", res = 300)
 
-# Plot
 tm_shape(r.m) +
-  tm_raster(n = 7, palette = palette_gradient, title = "Nucleotide diversity (Pi)") +
+  tm_raster(
+    n = 12, 
+    palette = colorRampPalette(c("#1D60B4","#43CBF3", "#ADDA90","#F4E54E","#FFA43C", "#FF462B"))(100),  # FIX: use palette= function
+    title = "Nucleotide diversity (Pi)"
+  ) +
   tm_shape(data_sf) +
-  tm_dots(col = "#37323E", size = 0.2, legend.show = TRUE) +
-  tm_text("Group", just = "left", ymod = 1, size = 0.7) +
-  tm_legend(legend.outside = TRUE)
+  tm_dots(col = "#37323E", size = 0.2) +
+  #tm_text("Group", just = "left", ymod = 1, size = 0.7) +
+  tm_layout(legend.outside = TRUE)
 
 dev.off()
 
+# ============================
 # Save as SVG
+# ============================
 svg(paste0(out_folder, "Nucleotide_diversity_across_europe_", Project, "_site_grouped_level.svg"),
     width = 10, height = 10)
 
-# Replot (tmap needs to be re-evaluated for each graphic device)
 tm_shape(r.m) +
-  tm_raster(n = 7, palette = palette_gradient, title = "Nucleotide diversity (Pi)") +
+  tm_raster(
+    n = 12, 
+    palette = colorRampPalette(c("#1D60B4","#43CBF3", "#ADDA90","#F4E54E","#FFA43C", "#FF462B"))(100),  # FIX: use palette= function
+    title = "Nucleotide diversity (Pi)"
+  ) +
   tm_shape(data_sf) +
-  tm_dots(col = "#37323E", size = 0.2, legend.show = TRUE) +
-  tm_text("Group", just = "left", ymod = 1, size = 0.7) +
-  tm_legend(legend.outside = TRUE)
+  tm_dots(col = "#37323E", size = 0.2) +
+  #tm_text("Group", just = "left", ymod = 1, size = 0.7) +
+  tm_layout(legend.outside = TRUE)
 
 dev.off()
+
+
 

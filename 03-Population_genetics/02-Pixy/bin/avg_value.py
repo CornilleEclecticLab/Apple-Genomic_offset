@@ -2,7 +2,10 @@ import os
 import pandas as pd
 
 # Configuration
-project = "test"
+# project = "dom_admixed_rm"
+# project = "full_genome_dom_admixed_rm_no_filter"
+project = "full_genome_dom_admixed_rm_no_filter_pi_by_ind"
+
 input_dir = f"./out/{project}/s01.Pixy_by_chromosome"
 output_dir = f"./out/{project}/s02.avg_value"
 os.makedirs(output_dir, exist_ok=True)

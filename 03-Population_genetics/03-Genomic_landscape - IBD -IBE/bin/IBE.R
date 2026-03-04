@@ -8,6 +8,7 @@ library(ggplot2)
 Project="dom_admixed_rm"
 out_folder=paste0("./out/",Project,"/s03.IBE/")
 
+
 dir.create(out_folder,recursive = T)
 
 ## genomic distance
@@ -34,13 +35,13 @@ select_geo <- which(geo_pcnm$values >= 0) #I will select only positive eigenvalu
 geo_pcnm_pos <-  as.data.frame(geo_pcnm$vectors)[, select_geo] #29 on 54 with dataframe transformation
 
 
-env <- read.csv(paste0('../../02-Climate_data/out/',Project,'/Bioclim_sample_dom_admixed_rm_chelsa_current.csv'), sep = '\t', dec=".", header = T)
+env <- read.csv(paste0('../../02-Climate_data/out/',Project,'/Bioclim_site_grouped_V2_',Project,'_CHELSA_current.csv'), sep = '\t', dec=".", header = T)
 env <- env %>%
   rename_with(~ paste0(., "_current"), .cols = starts_with("Bio"))
 rownames(env) <- env$Group
 env <- env[-c(1)]
 
-LGM <- read.csv(paste0('../../02-Climate_data/out/',Project,'/Bioclim_sample_dom_admixed_rm_chelsa_LGM.csv'), sep = "\t", dec = ".", header = T)
+LGM <- read.csv(paste0('../../02-Climate_data/out/',Project,'/Bioclim_site_grouped_V2_',Project,'_CHELSA_LGM.csv'), sep = "\t", dec = ".", header = T)
 LGM <- LGM %>%
   rename_with(~ paste0(., "_LGM"), .cols = starts_with("Bio"))
 rownames(LGM) <- LGM$Group
@@ -73,12 +74,13 @@ rdaFullModel <- capscale(gen_dist ~ scale(Bio1_current) + scale(Bio2_current) + 
                            scale(Bio8_current) + scale(Bio9_current) + scale(Bio10_current) + scale(Bio11_current) + 
                            scale(Bio12_current) + scale(Bio13_current) + scale(Bio14_current) + scale(Bio15_current) +
                            scale(Bio16_current) + scale(Bio17_current) + scale(Bio18_current) + scale(Bio19_current) +
-                           scale(PCNM1) + scale(PCNM2) + scale(PCNM3) + scale(PCNM4) + 
-                           scale(Bio1_LGM) + scale(Bio2_LGM) + scale(Bio3_LGM)+  scale(Bio4_LGM)+ scale(Bio5_LGM)+ 
+                           scale(PCNM1) + scale(PCNM2) + scale(PCNM3) + scale(PCNM4) + scale(PCNM5) + scale(PCNM6) +
+                           scale(PCNM7) + scale(PCNM8) + scale(PCNM9) +
+                           scale(Bio1_LGM) + scale(Bio2_LGM) + scale(Bio3_LGM) +  scale(Bio4_LGM)+ scale(Bio5_LGM)+ 
                            scale(Bio6_LGM)+ scale(Bio7_LGM)+ scale(Bio8_LGM)+ scale(Bio9_LGM)+ scale(Bio10_LGM)+ 
                            scale(Bio11_LGM)+ scale(Bio12_LGM) + scale(Bio13_LGM) + scale(Bio14_LGM) + scale(Bio15_LGM)+ 
                            scale(Bio16_LGM) + scale(Bio17_LGM) + scale(Bio18_LGM) + scale(Bio19_LGM), 
-                         data=scale_env_pcnm_LGM)#; anova(rdaFullModel)
+                         data=env_pcnm_LGM)#; anova(rdaFullModel)
 # round(extractAIC(rdaFullModel), digits = 3)
 # vif.cca(rdaFullModel)
 
@@ -94,12 +96,14 @@ anova.cca(rda1, by="mar")
 extractAIC(rda1)
 
 #Runing best model
-rda2 <- capscale(gen_dist ~ Bio4_current, 
-                 data=scale_env_pcnm_LGM)
+v_names <- gsub("scale\\(|\\)", "", names(vif.cca(rda1)))
+formula_str <- as.formula(paste("gen_dist ~", paste(names, collapse = " + ")))
+rda2 <- capscale(formula_str, data=scale_env_pcnm_LGM)
+
 extractAIC(rda2)
 anova(rda2)
-anova(rda2, by="mar")
+anova(rda2, by="margin",perm.max = 9999)
 
-result <- anova(rda2, by = "mar")
+result <- anova(rda2, by = "mar",perm.max = 9999)
 # Save the output to a text file
 capture.output(result, file = paste0(out_folder,"IBE_best_model_anova_result.txt"))

@@ -15,7 +15,9 @@ script_path = os.path.dirname(os.path.realpath(sys.argv[0]))
 bin_dir = script_path
 work_dir = os.path.dirname(script_path)
 input_dir = os.path.join(work_dir,'in')
-Project="dom_admixed_rm_FS_0"
+# Project="dom_admixed_rm"
+# Project="full_genome_dom_admixed_rm_no_filter"
+Project="full_genome_dom_admixed_rm_no_filter_pi_by_ind"
 output_dir = os.path.join(work_dir, 'out', Project, "s01.Pixy_by_chromosome")
 sbatch_dir = os.path.join(work_dir, 'out', Project,"s00.sbatch")
 sub_script_dir = os.path.join(bin_dir,script_basename+"_"+Project)
@@ -24,7 +26,7 @@ sub_script_dir = os.path.join(bin_dir,script_basename+"_"+Project)
 # Set input files
 ########################################################################
 chr_vcf_list = os.path.join(input_dir,f'vcf_file_{Project}.txt')
-chr_list = os.path.join(input_dir,f'chromosome_list.txt')
+chr_list = os.path.join(input_dir,f'chromosome_list_{Project}.txt')
 pop_path = os.path.join(input_dir,f'group_geo_{Project}.txt')
 
 # Ensure output directory exists
@@ -63,8 +65,8 @@ module load all gencore/3
 module load pixy
 module load bcftools
 
-
-pixy --stats pi fst dxy \\
+#--stats pi fst dxy
+pixy --stats pi \\
     --vcf {vcf} \\
     --populations {pop_path} \\
     --window_size 50000 \\
@@ -93,4 +95,3 @@ end_time = datetime.datetime.now()
 print('')
 print(' END '.center(79,'='))
 print(str(end_time-start_time).center(79))
-

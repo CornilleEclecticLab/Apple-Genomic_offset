@@ -2,16 +2,17 @@ rm(list = ls())
 source(file = "bin/s02.load_function.R")
 
 dir.create(OUTPUT_FOLDER,recursive = T)
-pca = read.delim(PCA_file, header = F, sep = " ")
-colnames(pca) <- c("Pop", "Seq_ID", paste0("PCA",1:20))
+pca = read.delim(PCA_file, header = TRUE, sep = "\t")
+colnames(pca) <- c("Pop", "Seq_ID", paste0("PCA",1:(length(colnames(pca))-2)))
+# colnames(pca) <- c("Seq_ID", paste0("PCA",1:(length(colnames(pca))-1)))
 dim(pca)
-ref_struct = read.delim(ref_struct_file); dim(ref_struct)
+ref_struct = read.csv(ref_struct_file); dim(ref_struct)
 pca_ref_struct <- merge(pca, ref_struct, by="Seq_ID")
 
 ## PCA 3D
 
 # Reorder factor levels
-cluster <- "Cluster"
+cluster <- "cluster"
 pca_ref_struct[[cluster]] <- factor(pca_ref_struct[[cluster]], levels = desired_levels)
 
 # Numeric index for color mapping
