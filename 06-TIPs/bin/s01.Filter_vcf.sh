@@ -13,10 +13,11 @@ module load plink/1.9
 module load samtools
 
 # Inputs
-VCF_LIST="./in/vcf_list_tips_dom_admixed_rm.txt" # File listing VCFs (one per line)
-REMOVE_LIST="./in/tips_dom_admixed_rm_list_V2.txt" # A file with one sample ID per line to remove
 # Project name for output files
-PROJECT="tips_dom_admixed_rm_V2"
+#PROJECT="tips_dom_admixed_rm_V2"
+PROJECT="tips_saclay"
+VCF_LIST="./in/vcf_list_${PROJECT}.txt" # File listing VCFs (one per line)
+REMOVE_LIST="./in/${PROJECT}_list.txt" # A file with one sample ID per line to remove
 OUTPUT_DIR="./out/${PROJECT}/s01.filter_vcf" # Directory for outputs
 
 mkdir -p "$OUTPUT_DIR"
