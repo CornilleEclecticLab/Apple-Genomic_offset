@@ -47,7 +47,7 @@ dir.create(file.path(OUT_FOLDER, "s04.Plot"), showWarnings = FALSE, recursive = 
 
 # List to store plots
 plots_list <- list()
-
+print(q_metadata)
 for (i in seq_len(nrow(q_metadata))) {
   qfile <- q_metadata$path[i]
   k_val <- q_metadata$k_val[i]
@@ -55,6 +55,7 @@ for (i in seq_len(nrow(q_metadata))) {
 
   get_Q <- read.table(qfile, header = FALSE, stringsAsFactors = FALSE)
   get_Q_bind <- cbind(get_Q, info) %>% arrange(Order_plot)
+  print(get_Q_bind)
 
   data_long <- pivot_longer(get_Q_bind, cols = starts_with("V"), names_to = "Variable", values_to = "Proportion")
   data_long$Seq_ID <- factor(data_long$Seq_ID, levels = get_Q_bind$Seq_ID)
