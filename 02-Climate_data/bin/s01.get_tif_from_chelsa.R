@@ -6,42 +6,42 @@
 # ===================
 
 # https://os.unil.cloud.switch.ch/chelsa02/chelsa/global/bioclim/bio01/1981-2010/CHELSA_bio01_1981-2010_V.2.1.tif
-rm(list=ls())
+# rm(list=ls())
 
-bio_nb <- 1:19
-bio_padded <- sprintf("%02d", bio_nb)
+# bio_nb <- 1:19
+# bio_padded <- sprintf("%02d", bio_nb)
 
-base_url <- "https://os.unil.cloud.switch.ch/chelsa02/chelsa/global/bioclim"
-dest_root <- "./out/s01.tif/current_climate"
+# base_url <- "https://os.unil.cloud.switch.ch/chelsa02/chelsa/global/bioclim"
+# dest_root <- "./out/s01.tif/current_climate"
 
-current_dir <- dest_root
-  if (!dir.exists(current_dir)) {
-        dir.create(current_dir, recursive = TRUE)
-      }
+# current_dir <- dest_root
+#   if (!dir.exists(current_dir)) {
+#         dir.create(current_dir, recursive = TRUE)
+#       }
 
-options(timeout = 100000) # set a longer time if needed
-for (i in bio_nb) {
-  # Format bio number (e.g., bio01)
-   bio_str <- paste0("bio", sprintf("%02d", i))
+# options(timeout = 100000) # set a longer time if needed
+# for (i in bio_nb) {
+#   # Format bio number (e.g., bio01)
+#    bio_str <- paste0("bio", sprintf("%02d", i))
   
-  file_name <- paste0("CHELSA_", bio_str, "_1981-2010_V.2.1.tif")
+#   file_name <- paste0("CHELSA_", bio_str, "_1981-2010_V.2.1.tif")
 
-  url_path <- paste(base_url, bio_str, "1981-2010", file_name, sep = "/")
+#   url_path <- paste(base_url, bio_str, "1981-2010", file_name, sep = "/")
 
-  # 3. Construct Destination Path
-  dest_path <- file.path(current_dir, file_name)
+#   # 3. Construct Destination Path
+#   dest_path <- file.path(current_dir, file_name)
 
-  # 4. Download
-  if (!file.exists(dest_path)) {
-    message(paste("Accessing:", url_path))
-    tryCatch({
-      # Added mode = "wb" for binary download (crucial for .tif files on Windows)
-      download.file(url_path, destfile = dest_path, mode = "wb", quiet = FALSE)
-    }, error = function(e) {
-      message(paste("Skipping: Could not find", bio_str, "for", ssp, "in", time))
-    })
-  }
-}
+#   # 4. Download
+#   if (!file.exists(dest_path)) {
+#     message(paste("Accessing:", url_path))
+#     tryCatch({
+#       # Added mode = "wb" for binary download (crucial for .tif files on Windows)
+#       download.file(url_path, destfile = dest_path, mode = "wb", quiet = FALSE)
+#     }, error = function(e) {
+#       message(paste("Skipping: Could not find", bio_str, "for", ssp, "in", time))
+#     })
+#   }
+# }
 
 
 # =======================
@@ -108,40 +108,41 @@ for (i in bio_nb) {
 # ================
 # = Past climate =
 # ================
-# rm(list=ls())
-# https://os.zhdk.cloud.switch.ch/chelsav1/pmip3/IPSL_IPSL-CM5A-LR/CHELSA_PMIP_IPSL-CM5A-LR_BIO_01.tif
+# https://os.zhdk.cloud.switch.ch/chelsa01/chelsa_trace21k/global/bioclim/bio01/CHELSA_TraCE21k_bio01_-200_V.1.0.tif
 
-# bio_nb <- 1:19
-# bio_padded <- sprintf("%02d", bio_nb)
+rm(list=ls())
 
-# base_url <- "https://os.zhdk.cloud.switch.ch/chelsav1/pmip3/IPSL_IPSL-CM5A-LR"
-# dest_root <- "./out/s01.tif/LGM_climate"
+bio_nb <- 1:19
+bio_padded <- sprintf("%02d", bio_nb)
 
-# current_dir <- dest_root
-#   if (!dir.exists(current_dir)) {
-#         dir.create(current_dir, recursive = TRUE)
-#       }
+base_url <- "https://os.zhdk.cloud.switch.ch/chelsa01/chelsa_trace21k/global/bioclim"
+dest_root <- "./out/s01.tif/LGM_climate"
 
-# options(timeout = 100000) # set a longer time if needed
-# for (i in bio_nb) {
-#   # Format bio number (e.g., bio01)
-#   bio_str <- sprintf("%02d", i)
+current_dir <- dest_root
+  if (!dir.exists(current_dir)) {
+        dir.create(current_dir, recursive = TRUE)
+      }
+
+options(timeout = 100000) # set a longer time if needed
+for (i in bio_nb) {
+  # Format bio number (e.g., bio01)
+  bio_str <- paste0("bio", sprintf("%02d", i))
   
-#   file_name <- paste0("CHELSA_PMIP_IPSL-CM5A-LR_BIO_", bio_str, ".tif")
+  file_name <- paste0("CHELSA_TraCE21k_", bio_str, "_-200_V.1.0.tif")
 
-#   url_path <- paste(base_url, file_name, sep = "/")
+  url_path <- paste(base_url, bio_str, file_name, sep = "/")
 
-#   # 3. Construct Destination Path
-#   dest_path <- file.path(current_dir, file_name)
+  # 3. Construct Destination Path
+  dest_path <- file.path(current_dir, file_name)
 
-#   # 4. Download
-#   if (!file.exists(dest_path)) {
-#     message(paste("Accessing:", url_path))
-#     tryCatch({
-#       # Added mode = "wb" for binary download (crucial for .tif files on Windows)
-#       download.file(url_path, destfile = dest_path, mode = "wb", quiet = FALSE)
-#     }, error = function(e) {
-#       message(paste("Skipping: Could not find", bio_str, "for", ssp, "in", time))
-#     })
-#   }
-# }
+  # 4. Download
+  if (!file.exists(dest_path)) {
+    message(paste("Accessing:", url_path))
+    tryCatch({
+      # Added mode = "wb" for binary download (crucial for .tif files on Windows)
+      download.file(url_path, destfile = dest_path, mode = "wb", quiet = FALSE)
+    }, error = function(e) {
+      message(paste("Skipping: Could not find", bio_str))
+    })
+  }
+}

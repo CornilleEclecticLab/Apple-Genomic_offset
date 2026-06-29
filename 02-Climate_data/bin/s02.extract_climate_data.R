@@ -90,7 +90,7 @@ for (time in time_periods) {
 message("Processing LGM climate")
 
 past_root <- "./out/s01.tif/LGM_climate"
-tif_files <- list.files(past_root, pattern = "\\.tif$", full.names = TRUE)
+tif_files <- list.files(past_root, pattern = "CHELSA_TraCE21k_.*.tif$", full.names = TRUE)
 climate_stack <- rast(tif_files)
       
 # Extract values
@@ -98,7 +98,15 @@ extracted <- extract(climate_stack, pts, ID = FALSE)
 # Clean up column names (removes the long CHELSA file prefix)
 # e.g., "CHELSA_ipsl..._bio01_..." becomes "bio01"
 # 1. Extract and convert to lowercase
-names(extracted) <- gsub(".*_(BIO)_(\\d+).*", "bio\\2", names(extracted))
+names(extracted) <- gsub(".*_(bio\\d+)_.*", "\\1", names(extracted))
+
+# Correction to change Kelvin value in Celsus degree for absolute variable
+# the other are range (bio 3 & 4) or differences (bio2 & 7)
+temp_cols <- c("bio01", "bio05", "bio06", "bio07", "bio08", "bio09", "bio10", "bio11")
+
+# Apply the conversion
+extracted[temp_cols] <- extracted[temp_cols] - 273.15 
+extracted <- extracted %>% mutate(bio03 = bio03/100)
 
 # Add metadata columns
 combined <- cbind(Seq_ID = coords$Seq_ID, extracted)
