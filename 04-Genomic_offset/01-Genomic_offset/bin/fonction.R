@@ -883,3 +883,97 @@ manhattan_plot_bonf_FDR <- function(df, TITLE, OUT_FILE){
     dpi = 300
   )
 }
+
+Map_Go_extrapolated <- function(df, timeline, ssp, type, limits){
+
+  # 1. Prepare Point Data
+  # Use the individual means you already calculated
+  pts <- df  %>%
+  mutate(
+    # Remplacer la virgule par un point, puis convertir en numérique
+    Longitude = as.numeric(gsub(",", ".", Longitude)),
+    Latitude = as.numeric(gsub(",", ".", Latitude))
+  ) %>%
+  group_by(Site, Longitude, Latitude, Country) %>%
+  summarise(
+    mean_offset = mean(offset, na.rm = TRUE),
+    n_trees = n(),
+    .groups = "drop"
+  ) %>%
+  filter(!is.na(Longitude), !is.na(Latitude))
+
+  # Convert to a spatial object (sf)
+  pts_sf <- st_as_sf(pts, coords = c("Longitude", "Latitude"), crs = 4326)
+
+  # 2. Create an empty Grid for the Europe area
+  # Define the extent (adjust based on your data)
+  grid_extent <- extent(-15, 40, 35, 65)
+  r <- raster(grid_extent, res = 0.2) # 0.2 degree resolution for smoothness
+  crs(r) <- crs(pts_sf)
+
+  # 3. Perform Interpolation (IDW - Inverse Distance Weighting)
+  # This calculates the value for every pixel based on nearby points
+  idw_mod <- gstat(formula = mean_offset ~ 1, data = as(pts_sf, "Spatial"))
+  idw_raster <- interpolate(r, idw_mod)
+
+  # 4. Mask the Raster to the Europe landmass
+  # This prevents the "heat" from showing up over the ocean
+  # europe_mask <- ne_countries(scale = "medium", returnclass = "sp", continent = "Europe")
+  # idw_masked <- mask(idw_raster, europe_mask)
+
+  europe_sf <- ne_countries(scale = "medium", returnclass = "sf", continent = "Europe")
+
+  # 2. Convert sf to Spatial object for the 'raster' package functions
+  # This solves the 'arg should be one of sf, sv' error
+  europe_sp <- as_Spatial(st_geometry(europe_sf))
+
+  # 3. Perform the mask using the converted object
+  # idw_raster is the result of your interpolate() function
+  idw_masked <- mask(idw_raster, europe_sp)
+
+  # 4. Optional: Crop to the specific extent of Europe to remove empty space
+  idw_final <- crop(idw_masked, extent(europe_sp))
+
+  # 5. Convert to Dataframe for ggplot
+  idw_df <- as.data.frame(idw_masked, xy = TRUE)
+  colnames(idw_df) <- c("long", "lat", "offset_val")
+
+  # 6. Plot the Extrapolation Map
+  p_extrap <- ggplot() +
+    # Draw the background map
+    geom_sf(data = st_as_sf(europe_sf), fill = "white", color = "gray90") +
+    
+    # Add the interpolated heat map layer
+    geom_raster(data = idw_df %>% filter(!is.na(offset_val)), 
+                aes(x = long, y = lat, fill = offset_val), interpolate = TRUE) +
+                
+    # geom_point(data = pts, 
+    #          aes(x = Longitude, y = Latitude, size = n_trees), 
+    #          alpha = 0.2) + #mean_offset
+    geom_point(data = pts, 
+           aes(x = Longitude, y = Latitude, size = n_trees), 
+           shape = 21,            # Circle with a border
+           color = "black",       # Fixed color for the border
+           fill = NA,  # Empty center
+           stroke = 0.8,          # Adjust border thickness
+           alpha = 0.6) +
+    # Match the color scale to your image (Blue -> Yellow -> Red)
+    scale_fill_gradientn(
+      colors = c("#9ecae1", "#ffeda0", "#feb24c", "#f03b20"), 
+      name = "Geometric Genomic Offset", 
+      limits = limits,   # Forces the scale to be identical
+      oob = scales::squish, # Ensures values exactly at the edge aren't lost
+      na.value = "transparent"
+    ) +
+    # Scale for the Color (Points) - Using the same colors
+    scale_color_gradientn(colors = c("black"), 
+                        limits = limits, oob = scales::squish) +
+    
+    coord_sf(xlim = c(-15, 40), ylim = c(35, 65), expand = FALSE) +
+    
+    theme_minimal() +
+    labs(title = paste0(timeline," / ",ssp," / ",type),
+        x = "Longitude", y = "Latitude")
+  
+  return(p_extrap)
+}
