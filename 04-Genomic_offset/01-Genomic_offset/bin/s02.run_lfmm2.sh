@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 #SBATCH --job-name=s02.lfmm2
-#SBATCH --output=./out/s00.sbatch/s02.lfmm2_dom_admixed_rm.out
-#SBATCH --error=./out/s00.sbatch/s02.lfmm2_dom_admixed_rm.err
+#SBATCH --output=./out/s00.sbatch/s02.lfmm2_dom_admixed_rm_v3.out
+#SBATCH --error=./out/s00.sbatch/s02.lfmm2_dom_admixed_rm_v3.err
 #SBATCH --time=10:00:00
 #SBATCH --cpus-per-task=1
 #SBATCH -c 1
-#SBATCH --mem=50G
+#SBATCH --mem=100G
 
 module load miniconda
 
@@ -26,4 +26,6 @@ geno_LDpruned="./out/dom_admixed_rm/s01.computation/chr_concat.geno20_maf005.ann
 # geno_LDpruned="./out/all_wild/s01.computation/chr_concat.geno20_maf005.anno_all_wild.LDpruned/file/chr_concat.geno20_maf005.anno_all_wild.LDpruned_filt.lfmm_imputed.geno"
 
 
-Rscript bin/s02.lfmm2_by_chr_v2.R $PROJECT $env_file $position_data $K_value $geno_LDpruned
+# Rscript bin/s02.lfmm2_by_chr_v2.R $PROJECT $env_file $position_data $K_value $geno_LDpruned
+
+Rscript bin/s02.lfmm2_by_chr_v3.R $PROJECT $env_file $position_data $K_value $geno_LDpruned

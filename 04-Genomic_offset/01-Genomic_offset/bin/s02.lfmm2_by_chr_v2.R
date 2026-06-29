@@ -338,7 +338,7 @@ write.csv(combined_pvalues_rm_final,file.path(file_dir, "All_chr_SNPs_pvalue_fil
 # - write full genome Y_filtered -
 # --------------------------------
 
-write.geno(full_geno, file.path(file_dir,"Full_chr.geno20_maf005.anno_dom_admixed_rm.pvalue_filt.geno"))
+write.geno(full_geno, file.path(file_dir,paste0("Full_chr.geno20_maf005.anno_",PROJECT,".pvalue_filt.geno")))
 # -----------------------------
 # ---- Global pvalues plot ----
 # -----------------------------
@@ -414,89 +414,6 @@ manhattan_plot_bonf_FDR(
   df = combined_pvalues_rm_final,
   TITLE = "Global Manhattan plot across all chromosomes", 
   OUT_FILE = file.path(fig_dir, "Global_Manhattan_plot_LFMM2_log10p_pvalue_filtered.png"))
-
-# combined_pvalues_final <- combined_pvalues_final %>%
-#   dplyr::mutate(
-#     chromosome = factor(chromosome),
-#     logp = -log10(pvalues),
-#     index = seq_len(n())
-#   )
-
-# # Gestion pvalues == 0 (sécurité viz)
-# combined_pvalues_final$logp[is.infinite(combined_pvalues_final$logp)] <-
-#   max(combined_pvalues_final$logp[is.finite(combined_pvalues_final$logp)]) + 1
-
-# thresh_bonf <- -log10(0.05 / nrow(combined_pvalues_final))
-
-# chromosomes <- levels(combined_pvalues_final$chromosome)
-
-# chrom_colors <- setNames(
-#   rep(c("grey30", "grey60"), length.out = length(chromosomes)),
-#   chromosomes
-# )
-
-# p <- ggplot(combined_pvalues_final, aes(x = index, y = logp)) +
-#   # SNPs non significatifs → alternance par chromosome
-#   geom_point(
-#     data = subset(combined_pvalues_final, !Bonf_signif & !FDR_signif),
-#     aes(color = chromosome),
-#     size = 0.8
-#   ) +
-#   # Bonferroni uniquement
-#   geom_point(
-#     data = subset(combined_pvalues_final, Bonf_signif & !FDR_signif),
-#     color = "blue",
-#     size = 1.2
-#   ) +
-#   # FDR uniquement
-#   geom_point(
-#     data = subset(combined_pvalues_final, !Bonf_signif & FDR_signif),
-#     color = "red",
-#     size = 1.2
-#   ) +
-#   # Bonferroni + FDR
-#   geom_point(
-#     data = subset(combined_pvalues_final, Bonf_signif & FDR_signif),
-#     color = "yellow",
-#     size = 1.4
-#   ) +
-#   # Seuil Bonferroni
-#   geom_hline(
-#     yintercept = thresh_bonf,
-#     color = "orange",
-#     linetype = "dashed",
-#     linewidth = 1
-#   ) +
-#   scale_color_manual(values = chrom_colors) +
-#   scale_x_continuous(
-#     breaks = tapply(combined_pvalues_final$index,
-#                     combined_pvalues_final$chromosome,
-#                     median),
-#     labels = chromosomes
-#   ) +
-#   labs(
-#     x = "Chromosome",
-#     y = expression(-log[10](p-value)),
-#     title = "Global Manhattan plot across all chromosomes"
-#   ) +
-#   theme_minimal(base_size = 14) +
-#   theme(
-#     plot.background  = element_rect(fill = "grey95", color = NA),
-#     panel.background = element_rect(fill = "white", color = "grey70"),
-#     panel.grid.major = element_line(color = "grey85"),
-#     panel.grid.minor = element_blank(),
-#     axis.text.x      = element_text(angle = 45, hjust = 1),
-#     legend.position  = "none"
-#   )
-
-# ggsave(
-#   filename = file.path(fig_dir, "Global_Manhattan_plot_LFMM2_log10p.png"),
-#   plot = p,
-#   width = 15,
-#   height = 6,
-#   units = "in",
-#   dpi = 300
-# )
 
 
 

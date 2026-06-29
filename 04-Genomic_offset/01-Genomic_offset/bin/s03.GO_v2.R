@@ -24,10 +24,11 @@ ref_info        <- args[4]
 K <- as.numeric(args[5])
 
 # PROJECT="dom_admixed_rm"
-# env_current_csv="/scratch/mc10739/02-Wild_apple_genomic_offset/Apple-Genomic_offset/02-Climate_data/out/dom_admixed_rm/Bioclim_dom_admixed_rm_chelsa_current.csv"
-# env_future_csv="/scratch/mc10739/02-Wild_apple_genomic_offset/Apple-Genomic_offset/02-Climate_data/out/dom_admixed_rm/env_Saclay_Chelsa"
+# env_current_csv="/scratch/mc10739/02-Wild_apple_genomic_offset/Apple-Genomic_offset/02-Climate_data/out/s02.climate_data/dom_admixed_rm/climate_extract_current_dom_admixed_rm.csv"
+# env_future_csv="/scratch/mc10739/02-Wild_apple_genomic_offset/Apple-Genomic_offset/02-Climate_data/out/s03.orchard_generalization/dom_admixed_rm/env_Saclay_Chelsa"
 # ref_info="./in/data_tree_dom_admixed_rm_V2.txt"
 # K=5
+
 
 message("🔧 Running Genomic Offset for project: ", PROJECT)
 
@@ -54,7 +55,7 @@ env_current_name <- basename(sub("\\.csv$", "", env_current_csv))
 env_future_name  <- basename(sub("\\.csv$", "", env_future_csv))
 
 # Read and convert CSVs to .env
-env_current <- read.delim(env_current_csv, header = TRUE, sep = "\t", dec = ".")
+env_current <- read.delim(env_current_csv, header = TRUE, sep = ",", dec = ".")
 env_current <- env_current[match(sorted_info$Seq_ID, env_current$Seq_ID), ]
 env_future  <- read.delim(env_future_csv, header = FALSE, sep = "\t", dec = ".")
 
@@ -70,11 +71,11 @@ X.pred <- read.env(file.path(env_dir, paste0(env_future_name, ".env")))
 
 # ---- Initialize storage ----
 chrom_folders <- list.dirs(comp_main, recursive = FALSE) %>% 
-  grep("chr_chr.*anno_dom_admixed_rm", ., value = TRUE)
+  grep(paste0("chr_chr.*anno_",PROJECT), ., value = TRUE)
 message("Found ", length(chrom_folders), " chromosome folders.")
 
 # ---- Run genetic.gap for the full genome ----
-full_geno_pvalue_filt <- read.geno(paste0(lfmm2_main, "file/Full_chr.geno20_maf005.anno_dom_admixed_rm.pvalue_filt.geno"))
+full_geno_pvalue_filt <- read.geno(paste0(lfmm2_main, "file/Full_chr.geno20_maf005.anno_",PROJECT,".pvalue_filt.geno"))
 
 full_geno <- NULL
 

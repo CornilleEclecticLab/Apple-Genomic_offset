@@ -17,27 +17,35 @@ library(raster)
 library(gstat)
 library(rnaturalearth)
 library(rnaturalearthdata)
+library(svglite)
 
 
 # --- 0. Setup & Config ---
 PROJECT <- "dom_admixed_rm"
-go_folder <- paste0("./out/", PROJECT, "/s03.GO/")
-val_folder <- paste0("./out/", PROJECT, "/s04.Validation_V3/") # New version folder
+# PROJECT <- "all_wild"
+go_folder <- paste0("./out/", PROJECT, "/s03.GO_V3/")
+val_folder <- paste0("./out/", PROJECT, "/s04.Validation_V4/") # New version folder
 
 traits_base <- c("Avg_Chl", "Avg_Flav", "Avg_NBI", "Bud_Break")
 offsets <- c("offset", "offset_Relstad")
 
+orchard <- "Saclay"
+
+
+
 offset_files <- c(
-  paste0(go_folder, "file/All_chr_offset_all_SNP.csv"),
-  paste0(go_folder, "file/All_chr_offset_GEA_SNP_Bonferroni.csv"),
-  paste0(go_folder, "file/All_chr_offset_GEA_SNP_FDR.csv"),
-  paste0(go_folder, "file/All_chr_offset_GEA_SNP_pvalue_filtered_Bonferroni.csv"),
-  paste0(go_folder, "file/All_chr_offset_GEA_SNP_pvalue_filtered_FDR.csv")
+paste0(go_folder, "file/GO_Filt_env_",orchard,"_Chelsa_All.csv"),
+paste0(go_folder, "file/GO_Filt_env_",orchard,"_Chelsa_Bonf.csv"),
+paste0(go_folder, "file/GO_Filt_env_",orchard,"_Chelsa_FDR.csv"),
+paste0(go_folder, "file/GO_Full_env_",orchard,"_Chelsa_All.csv"),
+paste0(go_folder, "file/GO_Full_env_",orchard,"_Chelsa_Bonf.csv"),
+paste0(go_folder, "file/GO_Full_env_",orchard,"_Chelsa_FDR.csv")
 )
 
 # --- 1. Load Data ---
 pheno_raw <- read.table("./in/Data_all_orchard_pheno_25022026.tsv", header=TRUE, sep="\t", dec=".")
 ind.info <- read.table("./in/data_tree_dom_admixed_rm_V2.txt", header=TRUE, sep="\t", dec=",")
+# ind.info <- read.table("./in/data_tree_all_wild.txt", header=TRUE, sep="\t", dec=",")
 
 # --- 2. Main Loop ---
 for (file_path in offset_files) {
@@ -50,7 +58,7 @@ for (file_path in offset_files) {
   dir.create(paste0(current_out_dir, "Plots/"), recursive = TRUE, showWarnings = FALSE)
 
   # Load and Merge Offset
-  go_data <- read.csv(file_path)
+  go_data <- read.csv(file_path)[c("squared.env.dist", "offset", "offset_Relstad")]
   ind.go <- cbind(ind.info, go_data)
   
   # Extrapolation Logic: Calculate site means for missing offsets
@@ -58,11 +66,14 @@ for (file_path in offset_files) {
     group_by(Site) %>%
     summarise(across(all_of(offsets), \(x) mean(x, na.rm = TRUE), .names = "mean_{.col}"))
 
-  # Final Integrated Dataset for Saclay
   df_saclay <- pheno_raw %>%
-    filter(Location == "Saclay") %>%
+    filter(Location == orchard) %>%
     rename(individual_ID = Secondary_ID) %>%
     filter(!grepl("Msyl-Ref", individual_ID)) %>%
+    # --- NEW FILTER START ---
+    # Remove rows where Month.Year_Death has any value (is not empty)
+    filter(is.na(Month.Year_Death) | Month.Year_Death == "") %>%
+    # --- NEW FILTER END ---
     left_join(ind.go, by = "individual_ID") %>%
     left_join(site_means, by = c("Site_Name" = "Site")) %>%
     mutate(
@@ -71,58 +82,155 @@ for (file_path in offset_files) {
       across(contains("Date"), as.Date)
     )
 
-  # --- 3. Growth Rate Calculations (AGR/RGR) ---
-  df_saclay <- df_saclay %>%
-    arrange(individual_ID, Year) %>%
-    group_by(individual_ID) %>%
-    mutate(
-    # Summer-to-Summer Growth (Long term)
-    days_ss = as.numeric(Summer_Trunk_Date - lag(Summer_Trunk_Date)),
-    AGR_Annual_ss = (Summer_Trunk_Measurement - lag(Summer_Trunk_Measurement)) / (days_ss / 365),
-    RGR_Annual_ss = (log(Summer_Trunk_Measurement) - log(lag(Summer_Trunk_Measurement))) / (days_ss / 365),
+  df_saclay <- df_saclay %>% 
+  arrange(individual_ID, Year) %>% 
+  group_by(individual_ID) %>% 
+  mutate( 
+    # --- 1. Summer-to-Summer Growth (Yearly) ---
+    # Verification: Current Summer must be > Previous Summer
+    days_ss = as.numeric(Summer_Trunk_Date - lag(Summer_Trunk_Date)), 
+    AGR_Annual_ss = if_else(Summer_Trunk_Measurement > lag(Summer_Trunk_Measurement) & days_ss > 0,
+                            (Summer_Trunk_Measurement - lag(Summer_Trunk_Measurement)) / (days_ss / 365), 
+                            NA_real_), 
+    RGR_Annual_ss = if_else(!is.na(AGR_Annual_ss),
+                            (log(Summer_Trunk_Measurement) - log(lag(Summer_Trunk_Measurement))) / (days_ss / 365), 
+                            NA_real_), 
 
-    # Winter-to-Winter Growth (Long term)
-    days_ww = as.numeric(Winter_Trunk_Date - lag(Winter_Trunk_Date)),
-    AGR_Annual_ww = (Winter_Trunk_Measurement - lag(Winter_Trunk_Measurement)) / (days_ww / 365),
-    RGR_Annual_ww = (log(Winter_Trunk_Measurement) - log(lag(Winter_Trunk_Measurement))) / (days_ww / 365),
+    # --- 2. Winter-to-Winter Growth (Yearly) ---
+    # Verification: Current Winter must be > Previous Winter
+    days_ww = as.numeric(Winter_Trunk_Date - lag(Winter_Trunk_Date)), 
+    AGR_Annual_ww = if_else(Winter_Trunk_Measurement > lag(Winter_Trunk_Measurement) & days_ww > 0,
+                            (Winter_Trunk_Measurement - lag(Winter_Trunk_Measurement)) / (days_ww / 365), 
+                            NA_real_), 
+    RGR_Annual_ww = if_else(!is.na(AGR_Annual_ww),
+                            (log(Winter_Trunk_Measurement) - log(lag(Winter_Trunk_Measurement))) / (days_ww / 365), 
+                            NA_real_), 
 
-    # Seasonal Growth (Winter to Summer)
-    days_ws = as.numeric(Summer_Trunk_Date - Winter_Trunk_Date),
-    AGR_Seasonal = (Summer_Trunk_Measurement - Winter_Trunk_Measurement) / (days_ws / 30), # Growth per month
-    RGR_Seasonal = (log(Summer_Trunk_Measurement) - log(Winter_Trunk_Measurement)) / (days_ws / 30)
-  ) %>%
-    ungroup()
+    # --- 3. Seasonal Growth (Within Year: Summer to Winter) ---
+    # Verification: Winter measurement MUST be higher than Summer measurement
+    days_sw = as.numeric(Winter_Trunk_Date - Summer_Trunk_Date), 
+    AGR_Seasonal = if_else(Winter_Trunk_Measurement > Summer_Trunk_Measurement & days_sw > 0,
+                           (Winter_Trunk_Measurement - Summer_Trunk_Measurement) / (days_sw / 30), 
+                           NA_real_), 
+    RGR_Seasonal = if_else(!is.na(AGR_Seasonal),
+                           (log(Winter_Trunk_Measurement) - log(Summer_Trunk_Measurement)) / (days_sw / 30), 
+                           NA_real_)
+  ) %>% 
+  ungroup()
 
   # Final Trait List
-  all_traits <- c(traits_base, "AGR_Annual_ss", "RGR_Annual_ss", "AGR_Annual_ww", "RGR_Annual_ww","AGR_Seasonal", "RGR_Seasonal")
+  all_traits <- c(traits_base, "AGR_Annual_ss", "AGR_Annual_ww", "AGR_Seasonal", "RGR_Annual_ss", "RGR_Annual_ww", "RGR_Seasonal")
 
-  # --- 4. The Mixed-Model Loop (The Selection Test) ---
-  model_results <- list()
-  
+  library(performance)
+  library(broom.mixed)
+
+  model_results_list <- list()
+
   for (trait in all_traits) {
-    # Clean data for model
-    df_mod <- df_saclay %>% filter(!is.na(.data[[trait]]), !is.na(offset), is.finite(.data[[trait]]))
     
-    if(nrow(df_mod) < 20) next # Skip if not enough data
-    
-    # Logic: Log transform everything except Bud_Break and Rates
-    if(trait %in% c("Bud_Break", "AGR_Annual_ss", "RGR_Annual_ss", "AGR_Annual_ww", "RGR_Annual_ww","AGR_Seasonal", "RGR_Seasonal")) {
-      formula_str <- paste0(trait, " ~ I(offset^2) + (1 | Year) + (1 | individual_ID)")
-    } else {
-      formula_str <- paste0("log(", trait, ") ~ I(offset^2) + (1 | Year) + (1 | individual_ID)")
+    # 1. Data Cleaning (As per your previous logic)
+    df_mod <- df_saclay %>% 
+      filter(!is.na(.data[[trait]]), !is.na(offset), !is.na(Site_Name), !is.na(Origin)) %>%
+      group_by(Year) %>%
+      mutate(W_rel = .data[[trait]] / mean(.data[[trait]], na.rm = TRUE)) %>%
+      ungroup() %>%
+      mutate(log_W = log(W_rel)) %>%
+      filter(is.finite(log_W))
+
+    if(nrow(df_mod) < 30) next # Increased slightly as we add more parameters
+
+    # 2. Determine Dependent Variable
+    dep_var <- if(trait %in% c("Bud_Break", "AGR_Annual_ss", "AGR_Annual_ww","AGR_Seasonal")) "log_W" else "W_rel"
+
+    # 3. Define the three model formulas
+    formulas <- list(
+      Base   = paste0(dep_var, " ~ offset + I(offset^2) + (1 | Year) + (1 | individual_ID)"),
+      w_Site = paste0(dep_var, " ~ offset + I(offset^2) + Site_Name + (1 | Year) + (1 | individual_ID)"),
+      Full   = paste0(dep_var, " ~ offset + I(offset^2) + Site_Name + Origin + (1 | Year) + (1 | individual_ID)")
+    )
+
+    # 4. Run and compare
+    for (mod_name in names(formulas)) {
+      try({
+        m <- lmer(as.formula(formulas[[mod_name]]), data = df_mod)
+        
+        # Extract Performance Metrics
+        perf <- model_performance(m)
+        
+        # Extract specific "offset" coefficient (Linear term)
+        res <- tidy(m, conf.int = TRUE) %>%
+          filter(term == "offset") %>%
+          mutate(
+            trait = trait,
+            model_type = mod_name,
+            n_obs = nrow(df_mod),
+            R2_marginal = perf$R2_marginal,
+            R2_conditional = perf$R2_conditional,
+            AIC = perf$AIC
+          )
+        
+        # Store using a unique key
+        model_results_list[[paste(trait, mod_name, sep="_")]] <- res
+      }, silent = TRUE)
     }
-    
-    try({
-      m <- lmer(as.formula(formula_str), data = df_mod)
-      res <- tidy(m, conf.int = TRUE) %>%
-        filter(term == "I(offset^2)") %>%
-        mutate(trait = trait, n_obs = nrow(df_mod))
-      model_results[[trait]] <- res
-    }, silent = TRUE)
+
+    plot_df <- df_mod
+
+    info_model <- model_results_list[[paste(trait, "Base", sep="_" )]]
+
+    p_budbreak_1 <- ggplot(plot_df, aes(x = offset, y = .data[[trait]])) +
+        geom_point(aes(color = as.factor(Origin)), alpha = 0.5, size = 2.5) +
+        geom_smooth(method = "lm", formula = y ~ x, color = "black", size = 1.5, se = TRUE) +
+        theme_minimal(base_size = 14) +
+        #scale_color_manual(values = c("#E69F00", "#56B4E9")) +
+        labs(title = "Impact of genomic offset on phenology",
+        x = "Genomic offset",
+        y = trait, #"Bud Break (Julian Days)",
+        color = "Origin") #+
+        # annotate("label", x = Inf, y = Inf, hjust = 1.1, vjust = 1.5,
+        # label = paste0("estimate:",round(info_model$estimate, digits=3),
+        # "\nt-value:",round(info_model$statistic, digits=3),
+        # "\nR2: ",round(info_model$R2_marginal, digits=3)),
+        # fill = "white", alpha = 0.5)
+    ggsave(paste0(current_out_dir,"Raw_",trait,"_Offset_Relationship_Origin.png"), p_budbreak_1, width = 8, height = 6, dpi=300)
+    ggsave(paste0(current_out_dir,"Raw_",trait,"_Offset_Relationship_Origin.svg"), p_budbreak_1, width = 8, height = 6)
+
+
+    p_budbreak <- ggplot(plot_df, aes(x = offset, y = .data[[dep_var]])) +
+      geom_point(aes(color = as.factor(Origin)), alpha = 0.5, size = 2.5) +
+      # Note: Changed 'size' to 'linewidth' in geom_smooth to avoid modern ggplot2 warnings
+      geom_smooth(method = "lm", formula = y ~ x, 
+                  color = "black", linewidth = 1.5, se = TRUE) +
+      theme_minimal(base_size = 14) +
+      labs(
+        title = "Impact of genomic offset on phenology",
+        x = "Genomic offset",
+        y = paste0(trait, " (Relative fitness)"), 
+        color = "Origin"
+      ) +
+      # 1. Turn off clipping so the label can be drawn outside the plot panel
+      coord_cartesian(clip = "off") +
+      # 2. Add extra padding to the right margin to make room for the label
+      # margin(top, right, bottom, left)
+      theme(plot.margin = margin(10, 150, 10, 10)) + 
+      # 3. Adjust hjust and vjust to push the label into the right margin
+      annotate("label", 
+              x = Inf, y = Inf, 
+              hjust = -0.15, vjust = 1, 
+              label = paste0("estimate: ", round(info_model$estimate, digits=3),
+                              "\nt-value: ", round(info_model$statistic, digits=3),
+                              "\nR2: ", round(info_model$R2_marginal, digits=3)),
+              fill = "white", alpha = 0.5)
+    # 3. Save the plot
+    ggsave(paste0(current_out_dir,trait,"_Offset_Relationship_Origin.png"), p_budbreak, width = 8, height = 6, dpi=300)
+    ggsave(paste0(current_out_dir,trait,"_Offset_Relationship_Origin.svg"), p_budbreak, width = 8, height = 6)
   }
 
-  summary_df <- bind_rows(model_results)
-  write.csv(summary_df, paste0(current_out_dir, "Models/Selection_Gradients_Summary.csv"), row.names = FALSE)
+  # Combine into one master summary
+  summary_df <- bind_rows(model_results_list)
+  write.csv(summary_df, paste0(current_out_dir, "Models/Selection_Gradients_Summary_Test.csv"), row.names = FALSE)
+# View a comparison for one trait
+# summary_df %>% filter(trait == "AGR_Seasonal") %>% select(model_type, R2_marginal, AIC)
 
   # --- 5. Visualizations ---
   # A. Forest Plot of Selection Gradients
@@ -138,63 +246,106 @@ for (file_path in offset_files) {
   # B. Correlation Matrix (using individual means)
   mean_ind <- df_saclay %>%
     group_by(individual_ID) %>%
-    summarise(across(all_of(c(all_traits, offsets)), \(x) mean(x, na.rm = TRUE)))
+    summarise(across(all_of(c(all_traits, offsets)), \(x) log(mean(x, na.rm = TRUE))))
   
   M <- cor(mean_ind %>% dplyr::select(-individual_ID), use = "pairwise.complete.obs")
-  p_corr <- ggcorrplot(M[offsets, all_traits], lab = TRUE, colors = c("#E46726", "white", "#6D9EC1"))
-  ggsave(paste0(current_out_dir, "Plots/Correlation_Matrix.pdf"), p_corr, width = 10, height = 5)
+  p_corr <- ggcorrplot(M[all_traits, offsets], lab = TRUE, colors = c("#E46726", "white", "#6D9EC1"))
+  #ggsave(paste0(current_out_dir, "Plots/Correlation_Matrix.pdf"), p_corr, width = 10, height = 5)
+  ggsave(paste0(current_out_dir,"Plots/test_log_Correlation_Matrix.png"), p_corr, width = 10, height = 5, dpi=300)
+  ggsave(paste0(current_out_dir,"Plots/test_log_Correlation_Matrix.svg"), p_corr, width = 10, height = 5)
 
+
+  # Calculate correlations per year
+  corr_year <- df_saclay %>%
+    group_by(Year) %>%
+    summarise(across(all_of(all_traits), 
+                    ~cor(.x, offset, use = "pairwise.complete.obs"))) %>%
+    pivot_longer(-Year, names_to = "trait", values_to = "correlation")
+
+  # Plot
+  p_year <- ggplot(corr_year, aes(x = as.factor(Year), y = trait, fill = correlation)) +
+    geom_tile() +
+    geom_text(aes(label = round(correlation, 2))) +
+    scale_fill_gradient2(low = "#E46726", mid = "white", high = "#6D9EC1", midpoint = 0) +
+    labs(title = "Correlation: Traits vs Offset (per Year)", x = "Year", y = "Trait") +
+    theme_minimal()
+
+  ggsave(paste0(current_out_dir,"Correlation_per_Year.png"), p_year, width = 8, height = 6, dpi=300)
+
+
+  # Calculate correlations per population
+  corr_pop <- df_saclay[!df_saclay$Origin=="Spain",] %>%
+    group_by(Origin) %>%
+    summarise(across(all_of(all_traits), 
+                    ~cor(.x, offset, use = "pairwise.complete.obs"))) %>%
+    pivot_longer(-Origin, names_to = "trait", values_to = "correlation")
+
+  # Plot
+  p_pop <- ggplot(corr_pop, aes(x = Origin, y = trait, fill = correlation)) +
+    geom_tile() +
+    geom_text(aes(label = round(correlation, 2))) +
+    scale_fill_gradient2(low = "#E46726", mid = "white", high = "#6D9EC1", midpoint = 0) +
+    labs(title = "Correlation: Traits vs Offset (per Population)", x = "Population", y = "Trait") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+  ggsave(paste0(current_out_dir,"Correlation_per_Pop.png"), p_pop, width = 10, height = 6, dpi=300)
+
+
+  corr_pop_rel <- df_saclay %>%
+  filter(Origin != "Spain") %>%
+  group_by(Origin, Year) %>% # Grouping by year ensures relative fitness is local
+  mutate(across(all_of(all_traits), 
+                ~ .x / mean(.x, na.rm = TRUE), 
+                .names = "{.col}_rel")) %>%
+  ungroup() %>%
+  group_by(Origin) %>%
+  summarise(across(ends_with("_rel"), 
+                   ~cor(.x, offset, use = "pairwise.complete.obs"))) %>%
+  pivot_longer(-Origin, names_to = "trait", values_to = "correlation")
+
+  # Clean up trait names for the plot (remove the "_rel" suffix for beauty)
+  corr_pop_rel$trait <- gsub("_rel", "", corr_pop_rel$trait)
+
+  p_pop_rel <- ggplot(corr_pop_rel, aes(x = Origin, y = trait, fill = correlation)) +
+  geom_tile(color = "white") +
+  geom_text(aes(label = sprintf("%.2f", correlation)), size = 3) +
+  scale_fill_gradient2(low = "#E46726", mid = "white", high = "#6D9EC1", 
+                       midpoint = 0, limit = c(-1, 1)) +
+  labs(title = "Correlation: Relative Traits vs Offset",
+       subtitle = "Relative Trait = Trait / Mean(Trait per Origin & Year)",
+       x = "Population (Origin)", y = "Relative Trait") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+  # Save the figure
+  ggsave(paste0(current_out_dir,"Correlation_Relative_Traits_Pop.png"), p_pop_rel, width = 10, height = 7, dpi=300)
+  ggsave(paste0(current_out_dir,"Correlation_Relative_Traits_Pop.svg"), p_pop_rel, width = 10, height = 7)
+
+  # Calculate correlations per year AND population
+  corr_year_pop <- df_saclay[!df_saclay$Origin=="Spain",] %>%
+    group_by(Year, Origin) %>%
+    summarise(across(all_of(all_traits), 
+                    ~cor(.x, offset, use = "pairwise.complete.obs")),
+              .groups = 'drop') %>%
+    pivot_longer(cols = all_of(all_traits), names_to = "trait", values_to = "correlation")
+
+  # Plot using Facets
+  p_year_pop <- ggplot(corr_year_pop, aes(x = Origin, y = trait, fill = correlation)) +
+    geom_tile() +
+    geom_text(aes(label = round(correlation, 2))) +
+    facet_wrap(~Year, ncol = 1) + # Each year gets its own matrix
+    scale_fill_gradient2(low = "#E46726", mid = "white", high = "#6D9EC1", midpoint = 0) +
+    labs(title = "Trait-Offset Correlation per Year and Population", 
+        x = "Population", y = "Trait") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+  ggsave(paste0(current_out_dir,"Correlation_per_Year_Pop.png"), p_year_pop, width = 12, height = 10, dpi=300)
 
   ## representation for bud breaks
   library(ggplot2)
   library(viridis)
-
-  # 1. Filter and clean data specifically for this plot
-  plot_df <- df_saclay %>%
-    filter(!is.na(Bud_Break), !is.na(offset))
-
-  # 2. Create the plot
-  p_budbreak <- ggplot(plot_df, aes(x = offset, y = Bud_Break)) +
-    # Add points colored by Year to show the 2 years of data
-    geom_point(aes(color = as.factor(Year)), alpha = 0.5, size = 2.5) +
-    
-    # Add the quadratic trend line (matches the I(offset^2) model)
-    # We use formula y ~ I(x^2) to show the effect of the squared offset
-    geom_smooth(method = "lm", formula = y ~ I(x^2), 
-                color = "black", size = 1.5, se = TRUE) +
-    
-    # Formatting
-    theme_minimal(base_size = 14) +
-    scale_color_manual(values = c("#E69F00", "#56B4E9")) +
-    labs(
-      title = "Impact of Genomic Offset on Phenology",
-      subtitle = "Maladapted individuals (high offset) exhibit significantly earlier Bud Break",
-      x = "Genomic Offset (Distance to Optimum)",
-      y = "Bud Break (Julian Days)",
-      color = "Year"
-    ) +
-    
-    # Add an annotation with your model stats
-    annotate("label", x = Inf, y = Inf, hjust = 1.1, vjust = 1.5,
-            label = "Effect size (ß): -6.88\nt-value: -6.33 (p < 0.001)",
-            fill = "white", alpha = 0.8)
-
-  # 3. Save the plot
-  ggsave("Bud_Break_Offset_Relationship.pdf", p_budbreak, width = 8, height = 6)
-
-  # Display the plot
-  print(p_budbreak)
-
-
-
-  ## GO representation
-
-  # library(ggplot2)
-  # library(sf)
-  # library(rnaturalearth)
-  # library(rnaturalearthdata)
-  # library(ggspatial)
-  # library(dplyr)
 
   # # 1. Prepare Spatial Data (Average offset per source site)
   map_data <- df_saclay %>%
@@ -205,46 +356,6 @@ for (file_path in offset_files) {
       .groups = "drop"
     ) %>%
     filter(!is.na(Longitude), !is.na(Latitude))
-
-  # # 2. Get a base map of Europe (assuming your trees are from Europe)
-  # world <- ne_countries(scale = "medium", returnclass = "sf")
-
-  # # 3. Create the Map
-  # p_map <- ggplot(data = world) +
-  #   # Draw the background map
-  #   geom_sf(fill = "#f9f9f9", color = "gray80") +
-    
-  #   # Zoom into Europe (adjust coordinates to fit your specific sites)
-  #   coord_sf(xlim = c(-15, 30), ylim = c(35, 65), expand = FALSE) +
-    
-  #   # Plot the sites. Color = Offset Value, Size = Number of trees
-  #   geom_point(data = map_data, 
-  #             aes(x = Longitude, y = Latitude, color = mean_offset, size = n_trees), 
-  #             alpha = 0.8) +
-    
-  #   # Add a star for Saclay (the common garden/planting site)
-  #   # Replace with actual Saclay coordinates
-  #   annotate("text", x = 2.16, y = 48.72, label = "★ Saclay", 
-  #           color = "red", fontface = "bold", vjust = -1) +
-    
-  #   # Aesthetics
-  #   scale_color_viridis_c(option = "magma", direction = -1, name = "Genomic Offset") +
-  #   theme_minimal() +
-  #   labs(
-  #     title = "Geographic Origin of Genomic Maladaptation",
-  #     subtitle = "Higher offset indicates greater genetic distance from the Saclay environment",
-  #     size = "Sample Size (n)"
-  #   ) +
-  #   annotation_scale(location = "bl", width_hint = 0.2) +
-  #   annotation_north_arrow(location = "bl", which_north = "true", 
-  #                         pad_x = unit(0.2, "in"), pad_y = unit(0.4, "in"),
-  #                         style = north_arrow_fancy_orienteering)
-
-  # # 4. Save
-  # ggsave("Map_Genomic_Offset.pdf", p_map, width = 10, height = 8)
-
-  # # Display
-  # print(p_map)
 
 # 1. Prepare Point Data
 # Use the individual means you already calculated
@@ -303,20 +414,26 @@ for (file_path in offset_files) {
                 aes(x = long, y = lat, fill = offset_val), interpolate = TRUE) +
     
     # Overlay the original sampling points (optional)
-    # geom_point(data = pts, aes(x = Longitude, y = Latitude), 
-    #           color = "black", size = 0.5, alpha = 0.3) +
     geom_point(data = pts, 
-              aes(x = Longitude, y = Latitude, color = mean_offset, size = n_trees), 
-              alpha = 0.8) +
+           aes(x = Longitude, y = Latitude, size = n_trees), 
+           shape = 21,            # Circle with a border
+           color = "black",       # Fixed color for the border
+           fill = NA,             # Empty center
+           stroke = 0.8,          # Adjust border thickness
+           alpha = 0.6) +
     
-    # Add a star for Saclay (the common garden/planting site)
-    # Replace with actual Saclay coordinates
-    annotate("text", x = 2.16, y = 48.72, label = "★ Saclay", 
-            color = "red", fontface = "bold", vjust = -1) +
+    # Add Saclay as a geom_point with aes() mapping to trigger a legend
+    geom_point(data = data.frame(lon = 2.16, lat = 48.72, Site = "Saclay"), 
+               aes(x = lon, y = lat, color = Site), 
+               size = 3,          # Adjust size as needed
+               shape = 16) +      # Solid circle
     
-    # Match the color scale to your image (Blue -> Yellow -> Red)
+    # Match the fill color scale to your image (Blue -> Yellow -> Red)
     scale_fill_gradientn(colors = c("#9ecae1", "#ffeda0", "#feb24c", "#f03b20"), 
                         name = "Offset", na.value = "transparent") +
+    
+    # Add the manual color scale to create the legend for Saclay
+    scale_color_manual(name = "Orchard", values = c("Saclay" = "red")) +
     
     coord_sf(xlim = c(-15, 40), ylim = c(35, 65), expand = FALSE) +
     theme_minimal() +
@@ -325,4 +442,75 @@ for (file_path in offset_files) {
 
   # Save
   ggsave(paste0(current_out_dir, "Plots/Extrapolation_Map_Offset.png"), p_extrap, width = 10, height = 7, dpi = 300)
+  ggsave(paste0(current_out_dir, "Plots/Extrapolation_Map_Offset.svg"), p_extrap, width = 10, height = 7)
+
+
+
+
+  # 1. Prepare Bud Break Data
+  # Assuming 'bud_break' is the column name in your df_saclay
+  map_data_bb <- df_saclay %>%
+    group_by(Site, Longitude, Latitude, Country) %>%
+    summarise(
+      mean_bb = mean(Bud_Break, na.rm = TRUE), # Use your specific column name here
+      n_trees = n(),
+      .groups = "drop"
+    ) %>%
+    filter(!is.na(Longitude), !is.na(Latitude), !is.na(mean_bb))
+
+  # 2. Get Europe Base Map
+  europe_sf <- ne_countries(scale = "medium", returnclass = "sf", continent = "Europe")
+
+  # 3. Create the Point Map
+  p_bud_break <- ggplot() +
+    # Draw the background map
+    geom_sf(data = europe_sf, fill = "gray95", color = "gray80", size = 0.2) +
+    
+    # Add the sampling points: Color and Size mapped to Bud Break value
+    geom_point(data = map_data_bb, 
+              aes(x = Longitude, y = Latitude, 
+                  fill = mean_bb, 
+                  size = mean_bb), 
+              shape = 21,      # Circle with border
+              color = "black", # Border color
+              stroke = 0.5, 
+              alpha = 0.8) +
+    
+    # Highlight Saclay Orchard
+    geom_point(data = data.frame(lon = 2.16, lat = 48.72, Site = "Saclay"), 
+              aes(x = lon, y = lat, color = Site), 
+              size = 4, 
+              shape = 18) + # Diamond shape for the orchard
+    
+    # Color Scale: Green (Early/Low) to Red (Late/High)
+    scale_fill_distiller(palette = "RdYlGn", 
+                        direction = 1, # 1 for Green at low, Red at high
+                        name = "Bud Break Value\n(Lower = Earlier)") +
+    
+    # Size Scale: Helps visualize the "lateness"
+    scale_size_continuous(range = c(2, 7), name = "Bud Break Value") +
+    
+    # Manual color for Saclay
+    scale_color_manual(name = "Common Garden", values = c("Saclay" = "blue")) +
+    
+    # Set Map Extent
+    coord_sf(xlim = c(-12, 35), ylim = c(35, 65), expand = FALSE) +
+    
+    # Clean Theme
+    theme_minimal() +
+    theme(
+      panel.background = element_rect(fill = "aliceblue", color = NA), # Light blue sea
+      legend.position = "right",
+      plot.title = element_text(face = "bold")
+    ) +
+    labs(
+      title = "Spatial Distribution of Bud Break Phenology",
+      subtitle = "Points represents site means from origin populations",
+      x = "Longitude", 
+      y = "Latitude"
+    )
+
+  # 4. Save
+  ggsave(paste0(current_out_dir, "Plots/Bud_Break_Distribution_Map.png"), p_bud_break, width = 10, height = 7, dpi = 300)
+  ggsave(paste0(current_out_dir, "Plots/Bud_Break_Distribution_Map.svg"), p_bud_break, width = 10, height = 7)
 }
