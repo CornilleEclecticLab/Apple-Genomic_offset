@@ -4,7 +4,8 @@ import pandas as pd
 # Configuration
 # project = "dom_admixed_rm"
 # project = "full_genome_dom_admixed_rm_no_filter"
-project = "full_genome_dom_admixed_rm_no_filter_pi_by_ind"
+project = "invariant_variant_filter_dom_admixed_rm_54K_pi_by_ind"
+# project = "invariant_variant_filter_dom_admixed_rm_54K"
 
 input_dir = f"./out/{project}/s01.Pixy_by_chromosome"
 output_dir = f"./out/{project}/s02.avg_value"

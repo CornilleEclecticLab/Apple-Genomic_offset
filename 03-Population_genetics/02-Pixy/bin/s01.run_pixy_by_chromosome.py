@@ -17,7 +17,9 @@ work_dir = os.path.dirname(script_path)
 input_dir = os.path.join(work_dir,'in')
 # Project="dom_admixed_rm"
 # Project="full_genome_dom_admixed_rm_no_filter"
-Project="full_genome_dom_admixed_rm_no_filter_pi_by_ind"
+#Project="full_genome_dom_admixed_rm_no_filter_pi_by_ind"
+# Project="invariant_variant_filter_dom_admixed_rm_54K"
+Project="invariant_variant_filter_dom_admixed_rm_54K_pi_by_ind"
 output_dir = os.path.join(work_dir, 'out', Project, "s01.Pixy_by_chromosome")
 sbatch_dir = os.path.join(work_dir, 'out', Project,"s00.sbatch")
 sub_script_dir = os.path.join(bin_dir,script_basename+"_"+Project)
@@ -73,7 +75,7 @@ pixy --stats pi \\
     --n_cores 10 \\
     --output_folder {output_dir} \\
     --output_prefix {sub_script_prefix} \\
-    --bypass_invariant_check yes
+    #--bypass_invariant_check
 '''
     # Write slurm script to file
     file = open(os.path.join(sub_script_dir,sub_script_prefix+'.sh'),'w')
