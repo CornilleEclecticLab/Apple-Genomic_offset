@@ -15,9 +15,11 @@ module load samtools
 # Inputs
 # Project name for output files
 #PROJECT="tips_dom_admixed_rm_V2"
-PROJECT="tips_saclay"
-VCF_LIST="./in/vcf_list_${PROJECT}.txt" # File listing VCFs (one per line)
-REMOVE_LIST="./in/${PROJECT}_list.txt" # A file with one sample ID per line to remove
+PROJECT="tips_dom_admixed_rm_V3"
+#VCF_LIST="./in/vcf_list_${PROJECT}.txt" # File listing VCFs (one per line)
+VCF_LIST="./in/vcf_list_tips_dom_admixed_rm.txt"
+#REMOVE_LIST="./in/${PROJECT}_list.txt" # A file with one sample ID per line to remove
+REMOVE_LIST="./in/tips_dom_admixed_rm_list_V2.txt"
 OUTPUT_DIR="./out/${PROJECT}/s01.filter_vcf" # Directory for outputs
 
 mkdir -p "$OUTPUT_DIR"

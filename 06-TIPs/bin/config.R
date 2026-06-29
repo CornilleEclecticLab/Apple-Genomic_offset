@@ -1,7 +1,7 @@
 ## config file
 
 # Parameters
-Project <- "tips_dom_admixed_rm_V2" # all
+Project <- "tips_dom_admixed_rm_V3" # all
 K=5 # all
 nb_rep=20 # computation
 
@@ -12,16 +12,16 @@ lfmm_folder <- paste0("./out/", Project, "/s04.lfmm2/")
 go_folder <- paste0("./out/", Project, "/s05.GO/")
 
 # file
-lfmm <- paste0("./out/",Project,"/s02.vcf_to_lfmm/GraffiTE.merged.genotypes_tips_dom_admixed_rm.lfmm") #lfmm file, built from a vcf and turn into a .012 file (only a change in the extension is needed)
+lfmm <- paste0("./out/",Project,"/s02.vcf_to_lfmm/GraffiTE.merged.genotypes_",Project,".lfmm") #lfmm file, built from a vcf and turn into a .012 file (only a change in the extension is needed)
 # full pathway need to be available
-env.1 <- "./in/Bioclim_dom_admixed_rm_chelsa_current.csv" #local environment
+env.1 <- "/scratch/mc10739/02-Wild_apple_genomic_offset/Apple-Genomic_offset/02-Climate_data/out/s02.climate_data/dom_admixed_rm/climate_extract_current_dom_admixed_rm.csv" #local environment
 # full pathway need to be available
-env.2 <- "./in/env_Saclay_Chelsa"
+env.2 <- "/scratch/mc10739/02-Wild_apple_genomic_offset/Apple-Genomic_offset/02-Climate_data/out/s03.orchard_generalization/dom_admixed_rm/env_Saclay_Chelsa"
 # full pathway need to be available
 vcf <- paste0("./out/",Project,"/s01.filter_vcf/GraffiTE.merged.genotypes_",Project,".vcf.gz")
 #vcf from which the lfmm was built, use in the GEA for SNP id
 # full pathway need to be available
-ref <- "./in/tips_dom_admixed_rm_info_sample_V2.txt"
+ref <- "./in/data_tree_dom_admixed_rm_V2.txt"
 # in file, but full pathway need to be available
 
 

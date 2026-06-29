@@ -10,7 +10,7 @@
 module load all gencore/3
 module load plink/1.9
 
-PROJECT="tips_dom_admixed_rm"
+PROJECT="tips_dom_admixed_rm_V3"
 OUT_FOLD="./out/$PROJECT/s06.plink_distance"
 
 mkdir -p $OUT_FOLD

@@ -35,10 +35,10 @@ work.directory = paste0(lfmm_folder, "file/")
 fig_output = paste0(lfmm_folder, "figure/")
 file_name <- basename(sub("\\.lfmm$", "", lfmm))
 
-## Read SNPs and geno data
-#snp_names_filt <- data.frame(extract_SNPs_names(vcf))
-snp_names_filt <- read.csv(paste0(computational_folder,"file/", file_name, "_snp_names_filtered.csv"))[,1]
-print(head(snp_names_filt))
+## Read tips and geno data
+#tip_names_filt <- data.frame(extract_tips_names(vcf))
+tip_names_filt <- read.csv(paste0(computational_folder,"file/", file_name, "_TIPs_names_filtered.csv"))[,1]
+print(head(tip_names_filt))
 
 if (file.exists(paste0(computational_folder,"file/", file_name, "_filt.lfmm_imputed.geno"))){
 
@@ -67,12 +67,12 @@ out_file <- file.path(env_output, paste0(env_name, ".env"))
 
 # Check if file already exists
 
-env <- read.delim(env.1, header = TRUE, sep = '\t', dec = ".")
+env <- read.delim(env.1, header = TRUE, sep = ",", dec = ".")
 
 env_ordered <- env[match(sorted_info$Seq_ID, env$Seq_ID), ]
 head(env_ordered)
 
-env.format.1 <- as.data.frame(scale(env_ordered[, grep("^Bio", colnames(env))], center = FALSE, scale = FALSE))
+env.format.1 <- as.data.frame(scale(env_ordered[, grep("^bio", colnames(env))], center = FALSE, scale = FALSE))
 write.env(env.format.1, out_file)
 
 message("...Done.")
@@ -111,20 +111,23 @@ ggsave(
 
 # ===== Manhattan plot =====
 pv <- lfmm2.test(object = mod.lfmm2, input = Y, env = X, full = TRUE)
+
 df_pv <- data.frame(
-  SNPs = snp_names_filt,
+  TIPs = tip_names_filt,
   pvalues = as.numeric(pv$pvalues),
   fscores = as.numeric(pv$fscores),
   adj.r.squared = as.numeric(pv$adj.r.squared)
 )
 
-p_manhattan <- ggplot(df_pv, aes(x = seq_along(SNPs), y = -log10(pvalues))) +
+plot_histo(df_pv, "TIPs_pvalue_distribution", file.path(fig_output,"TIPs_full_test_pvalue_distribution.png"))
+
+p_manhattan <- ggplot(df_pv, aes(x = seq_along(TIPs), y = -log10(pvalues))) +
   geom_point(color = "grey30", size = 0.6) +
   geom_hline(yintercept = -log10(0.1 / length(pv$pvalues)),
              color = "orange", linetype = "solid", linewidth = 0.8) +
   labs(
-    title = "Manhattan plot of log10 p-value of each SNP for all climate variables",
-    x = "SNP Index",
+    title = "Manhattan plot of log10 p-value of each tip for all climate variables",
+    x = "tip Index",
     y = expression(-log[10](pvalue))
   ) +
   theme_minimal(base_size = 11) +
@@ -142,8 +145,12 @@ ggsave(
 # Save table outputs
 write.csv(df_pv, file = paste0(work.directory, file_name, "_GEAs_full.csv"), row.names = FALSE)
 
-GEA_snp_all <- which(-log10(pv$pvalues) > -log10(0.1 / length(pv$pvalues)))
-write.csv(GEA_snp_all, file = paste0(work.directory, file_name, "_SNPs_associated_with_all_bio.csv"), row.names = FALSE)
+GEA_tips_bonf <- which(-log10(pv$pvalues) > -log10(0.1 / length(pv$pvalues)))
+write.csv(GEA_tips_bonf, file = paste0(work.directory, file_name, "_TIPS_GEA_Bonf.csv"), row.names = FALSE)
+
+q_obj <- qvalue::qvalue(pv$pvalues, fdr.level = 0.05)
+GEA_tips_FDR <- which(q_obj$significant)
+write.csv(GEA_tips_FDR, file = paste0(work.directory, file_name, "_TIPS_GEA_FDR.csv"), row.names = FALSE)
 
 # ===== Variable-specific plots =====
 pv.2 <- lfmm2.test(object = mod.lfmm2, input = Y, env = X, full = FALSE)
@@ -154,7 +161,7 @@ plot_list <- list()
 
 for (i in seq_along(name_plot)) {
   df <- data.frame(
-    SNPs = snp_names_filt,
+    tips = tip_names_filt,
     pval = as.numeric(pv.2$pvalues[i, ]),
     qval = as.numeric(qvalue(pchisq((pv.2$zscores[i, ] ^ 2) / pv.2$gif,
                                     df = 1, lower = FALSE))$qvalue),
@@ -170,17 +177,17 @@ for (i in seq_along(name_plot)) {
   if (nrow(df_all) == 0) {
     df_all <- df_named
   } else {
-    df_all <- merge(df_all, df_named, by = "SNPs")
+    df_all <- merge(df_all, df_named, by = "tips")
   }
 
   # ✅ ggplot uses df (with pval, not renamed)
-  p <- ggplot(df, aes(x = seq_along(SNPs), y = -log10(pval))) +
+  p <- ggplot(df, aes(x = seq_along(tips), y = -log10(pval))) +
     geom_point(color = "grey30", size = 0.6) +
     geom_hline(yintercept = -log10(0.1 / length(pv.2$pvalues[i, ])),
                linetype = "dashed", color = "orange") +
     labs(
       title = name_plot[i],
-      x = "SNP index",
+      x = "tip index",
       y = expression(-log[10](pvalue))
     ) +
     theme_minimal(base_size = 9) +
@@ -207,4 +214,5 @@ ggsave(
 
 # Save variable-specific results
 write.csv(df_all, file = paste0(work.directory, file_name, "_GEAs_bio_sep.csv"), row.names = FALSE)
+## maybe add the bio sep FDR and FULL
 message("...Done.")

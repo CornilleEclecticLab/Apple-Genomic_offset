@@ -28,7 +28,7 @@ create_directory <- function(folder){
 }
 
 ## extract SNPs name from vcf
-extract_SNPs_names <- function(vcf_file) {
+extract_tips_names <- function(vcf_file) {
   # Check if the file is compressed based on its extension
   if(grepl("\\.gz$", vcf_file)) {
     # Compressed VCF
@@ -45,9 +45,9 @@ extract_SNPs_names <- function(vcf_file) {
   }
   
   # Execute the command and capture output
-  snp_names <- system(bash_command, intern = TRUE)
+  tips_names <- system(bash_command, intern = TRUE)
   
-  return(snp_names)
+  return(tips_names)
 }
 
 
@@ -224,4 +224,26 @@ make_env_file <- function(env_file){
   env.scale <- scale(env, center = F, scale = F)
   write.env(env.scale, paste0(env_file,'.env'))
   message("Done for :", env_file)
+}
+
+plot_histo <- function(df, FIG_TITLE , OUT_FILE){
+  # histogram
+  p.2 <- ggplot(df, aes(x = .data[["pvalues"]])) +
+  geom_histogram(
+    binwidth = 0.01,
+    fill = "grey80",
+    color = "black"
+  ) +
+  labs(
+    title = FIG_TITLE,
+    x = "P-value",
+    y = "Count"
+  ) +
+  theme_classic()
+
+  ggsave(
+    filename = OUT_FILE,
+    plot = p.2,
+    width = 15, height = 6, units = "in", dpi = 300
+  )
 }

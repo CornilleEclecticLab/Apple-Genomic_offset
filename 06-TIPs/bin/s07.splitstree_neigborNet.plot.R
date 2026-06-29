@@ -8,9 +8,9 @@ library(phangorn)
 library(RColorBrewer)
 
 
-PROJECT <- "tips_dom_admixed_rm"
+PROJECT <- "tips_dom_admixed_rm_V3"
 OUT_FOLD <- paste0("./out/",PROJECT,"/s07.splitstree/")
-VCF <- "GraffiTE.merged.genotypes_tips_dom_admixed_rm.vcf.gz"
+VCF <- paste0("GraffiTE.merged.genotypes_",PROJECT,".vcf.gz")
 
 dir.create(OUT_FOLD, recursive = TRUE)
 
@@ -54,16 +54,16 @@ net <- read.nexus.networx(
 )
 
 group_ind <- read.table(
-  paste0(OUT_FOLD, "Group_genetic.ind.FS_landscape_K5.tsv"),
+  paste0(OUT_FOLD, "Group_genetic.ind.Global_cluster_pure_wild.tsv"),
   header = TRUE, stringsAsFactors = FALSE, sep="\t"
 )
 group_shape <- read.table(
-   paste0(OUT_FOLD, "Group_genetic.shape.FS_landscape_K5.tsv"),
+   paste0(OUT_FOLD, "Group_genetic.shape.Global_cluster_pure_wild.tsv"),
   header = TRUE, stringsAsFactors = FALSE, sep="\t"
 )
 
 group_color <- read.table(
-   paste0(OUT_FOLD, "Group_genetic.color.FS_landscape_K5.tsv"),
+   paste0(OUT_FOLD, "Group_genetic.color.Global_cluster_pure_wild.tsv"),
   header = TRUE, sep = "\t", stringsAsFactors = FALSE
 )
 

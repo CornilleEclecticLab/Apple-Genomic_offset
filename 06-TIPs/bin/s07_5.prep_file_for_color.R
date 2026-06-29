@@ -4,13 +4,14 @@ library(dplyr)
 library(stringr)
 
 # ==== Parameters ====
-PROJECT <- "tips_dom_admixed_rm"
-input_file <- "./in/cluster_assignation_FS_landscape_K5.txt"  # Adjust if needed
+PROJECT <- "tips_dom_admixed_rm_V3"
+input_file <- "./in/Global_cluster_pure_wild.txt"  # Adjust if needed
 
 # ==== Extract suffix ====
 suffix <- str_remove(basename(sub("\\.txt$", "", input_file)), "^cluster_assignation_")
 
 OUT_FOLD <-  paste0("./out/",PROJECT,"/s07.splitstree/")
+dir.create(OUT_FOLD, recursive=T)
 
 color_output_file   <- file.path(OUT_FOLD, paste0("Group_genetic.color.", suffix, ".tsv"))
 shape_output_file   <- file.path(OUT_FOLD, paste0("Group_genetic.shape.", suffix, ".tsv"))
@@ -47,35 +48,35 @@ shape_mapping <- c(
 df <- df %>%
   mutate(
     Cluster_group = case_when(
-      Cluster %in% c("crops-wild admixed", "wild-wild admixed") ~ Cluster,
-      str_detect(Cluster, "P\\.[^-]+") ~ str_extract(Cluster, "P\\.[^-]+"),
-      TRUE ~ Cluster
+      Global_Cluster %in% c("crops-wild admixed", "wild-wild admixed") ~ Global_Cluster,
+      str_detect(Global_Cluster, "P\\.[^-]+") ~ str_extract(Global_Cluster, "P\\.[^-]+"),
+      TRUE ~ Global_Cluster
     ),
     Color_key = Cluster_group,
     Shape_key = case_when(
-      Cluster %in% c("crops-wild admixed", "wild-wild admixed") ~ Cluster,
-      str_detect(Cluster, "P\\.[^-]+") ~ str_extract(Cluster, "P\\.[^-]+"),
-      TRUE ~ Cluster
+      Global_Cluster %in% c("crops-wild admixed", "wild-wild admixed") ~ Global_Cluster,
+      str_detect(Global_Cluster, "P\\.[^-]+") ~ str_extract(Global_Cluster, "P\\.[^-]+"),
+      TRUE ~ Global_Cluster
     )
   )
 
 # ==== Create mappings ====
 color_df <- df %>%
-  select(Cluster, Color_key) %>%
+  select(Global_Cluster, Color_key) %>%
   distinct() %>%
   mutate(Color = paste0('"', color_mapping[Color_key], '"')) %>%  # wrap in quotes
-  select(Cluster, Color)
+  select(Global_Cluster, Color)
 
 shape_df <- df %>%
-  select(Cluster, Shape_key) %>%
+  select(Global_Cluster, Shape_key) %>%
   distinct() %>%
   mutate(Shape = shape_mapping[Shape_key]) %>%
-  select(Cluster, Shape)
+  select(Global_Cluster, Shape)
 
 # ==== Save output ====
 # Rename columns before writing
-color_df <- color_df %>% rename(Group = Cluster, Color_HEX = Color)
-shape_df <- shape_df %>% rename(Group = Cluster, shape = Shape)
+color_df <- color_df %>% rename(Group = Global_Cluster, Color_HEX = Color)
+shape_df <- shape_df %>% rename(Group = Global_Cluster, shape = Shape)
 
 # Write with correct formatting
 write_tsv(color_df, color_output_file, quote_escape = "none")
@@ -83,7 +84,7 @@ write_tsv(shape_df, shape_output_file)
 
 # ==== Write modified input file ====
 df_renamed <- df %>%
-  select(Ind = Seq_ID, Group = Cluster)
+  select(Ind = Seq_ID, Group = Global_Cluster)
 
 write_tsv(df_renamed, modified_input_file)
 

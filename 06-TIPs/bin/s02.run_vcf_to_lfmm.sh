@@ -11,7 +11,7 @@
 module load all gencore/3
 module load python
 
-PROJECT="tips_saclay"
+PROJECT="tips_dom_admixed_rm_V3"
 OUTPUT_DIR="./out/${PROJECT}/s02.vcf_to_lfmm" # Directory for outputs
 vcf="./out/${PROJECT}/s01.filter_vcf/GraffiTE.merged.genotypes_${PROJECT}.vcf.gz"
 

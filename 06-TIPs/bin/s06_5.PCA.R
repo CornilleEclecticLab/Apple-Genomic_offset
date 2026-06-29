@@ -4,7 +4,7 @@ library(rgl)
 library(plotly)
 library(scatterplot3d)
 
-PROJECT="tips_dom_admixed_rm"
+PROJECT="tips_dom_admixed_rm_V3"
 IN_FOLD=paste0("./out/", PROJECT, "/s06.plink_distance/")
 OUT_FOLD=paste0("./out/", PROJECT, "/s06_5.PCA/")
 METHOD <- "FS"
@@ -16,7 +16,7 @@ pca = read.delim(paste0(IN_FOLD,"GraffiTE.merged.genotypes_",PROJECT,".eigenvec"
 colnames(pca) <- c("Seq_ID", paste0("PCA",1:20))
 
 ref = read.delim("./in/tips_dom_admixed_rm_info_sample.txt", header = T, sep = "\t", dec = ",")
-ref_struct = read.delim("./in/cluster_assignation_FS_landscape_K5.txt"); dim(ref_struct)
+ref_struct = read.delim("./in/Global_cluster_pure_wild.txt"); dim(ref_struct)
 pca_ref_struct <- merge(pca, ref_struct, by="Seq_ID")
 
 desired_levels <- c(
@@ -40,7 +40,7 @@ shape_palette <- c(21, 22, 23, 24, 25, 21)
 ## PCA 3D
 
 # Reorder factor levels
-cluster <- "Cluster"
+cluster <- "Global_Cluster"
 pca_ref_struct[[cluster]] <- factor(pca_ref_struct[[cluster]], levels = desired_levels)
 
 # Numeric index for color mapping

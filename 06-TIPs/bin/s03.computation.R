@@ -29,8 +29,8 @@ create_directory(work.directory)
 create_directory(fig_output)
 message("...Done")
 
-## SNPs name extraction
-snp_names <- data.frame(extract_SNPs_names(vcf))
+## tips name extraction
+tip_names <- data.frame(extract_tips_names(vcf))
 
 ## File name
 file_name <- basename(sub("\\.lfmm$", "", lfmm))
@@ -51,9 +51,9 @@ column_to_remove <- which(all_equal | one_different)
 print(paste("There is", length(column_to_remove), "column(s) to remove"))
 
 geno.data_filt <- geno.data[, -column_to_remove]
-snp_names_filt <- snp_names[-column_to_remove, ]
+tip_names_filt <- tip_names[-column_to_remove, ]
 
-write.csv(snp_names_filt, file = paste0(work.directory, file_name, "_snp_names_filtered.csv"), row.names = FALSE)
+write.csv(tip_names_filt, file = paste0(work.directory, file_name, "_TIPs_names_filtered.csv"), row.names = FALSE)
 
 write.geno(geno.data_filt, paste0(work.directory, file_name, "_filt.geno"))
 geno2lfmm(paste0(work.directory, file_name, "_filt.geno"), paste0(work.directory, file_name, "_filt.lfmm"))

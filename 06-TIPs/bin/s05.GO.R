@@ -2,164 +2,109 @@
 rm(list = ls())
 source("./bin/fonction.R")
 source("./bin/config.R")
-
-# Project <- "dom_admixed_rm"
-# K=5
-# output_folder <- paste0("./out/", Project, "/s03.GO/")
-# computational_folder <- paste0("./out/", Project, "/s01.computation/"
-# lfmm_folder <- paste0("./out/", Project, "/s02.lfmm/")
-# 
-
-message("Folders creation...")
-create_directory(go_folder)
-work.directory <- paste0(go_folder, "file/")
-fig_output <- paste0(go_folder, "figure/")
-env_output <- paste0(go_folder, 'env/')
-create_directory(work.directory)
-create_directory(fig_output)
-create_directory(env_output)
-message("...Done")
-
-
-file_name <- basename(sub("\\.lfmm$", "", lfmm))
-
-## Read data
-info_ref_all_SYL = read.table(ref, header = TRUE, sep = '\t')
-
-if (file.exists(paste0(computational_folder,"file/", file_name, "_filt.lfmm_imputed.geno"))){
-  Y <- read.geno(paste0(computational_folder,"file/", file_name, "_filt.lfmm_imputed.geno"))
-} else {
-  Y <- read.geno(paste0(computational_folder,"file/", file_name, "_filt.geno"))
-}
-
-env_name <- basename(sub("\\.csv$", "", env.1))
-X <- read.env(paste0(lfmm_folder, "env/", env_name,".env"))
-
-# Define names
-env_name <- basename(sub("\\.csv$", "", env.2))
-out_file <- file.path(env_output, paste0(env_name,".env"))
-
-# Check if file already exists
-next_env <- read.delim(env.2, header = FALSE, sep = '\t', dec = '.')
-env.format.2 <- scale(next_env[c(1:length(next_env))], center = FALSE, scale = FALSE)
-write.env(env.format.2, out_file)
-message(paste("Created:", env_name, ".env"))
-
-X.pred <- read.env(paste0(env_output, env_name, ".env"))
-
-# next_env <- read.delim(env.2, header = TRUE, sep = ',', dec = '.')
-# new_env.format.2 <- scale(next_env[c(2:length(next_env))], center = FALSE, scale = FALSE)
-# write.env(new_env.format.2, paste0(input_folder, env.2, '.env'))
-
-####----- Prediction -----
-message("Prediction with all SNPs...")
-
-# Compute genomic offset with all SNPs
-g.gap.scaled <- genetic.gap(input = Y, env = X, pred.env = X.pred, scale = TRUE, K = K)
-
-# Compute squared environmental distances
-Delta <- X[, 1:19] - X.pred[, 1:19]
-squared.env.dist <- rowSums(Delta^2)
-
-# Prepare data frame for plotting
-data_test <- cbind(
-  squared.env.dist, 
-  g.gap.scaled$offset, 
-  g.gap.scaled$distance
-)
-colnames(data_test) <- c("squared.env.dist", "offset", "offset_Relstad")
-write.table(x=data_test, paste0(work.directory, file_name, "_all_SNPs_offset_prediction.tsv"), row.names=F)
-
-
-# Sort sample info
-sorted_info <- info_ref_all_SYL[order(info_ref_all_SYL$Order_vcf), ]
-
-# Ensure figure output folder exists
-if(!dir.exists(fig_output)) dir.create(fig_output, recursive = TRUE)
-
-# --- Plots for all SNPs ---
 library(ggplot2)
 library(ggrepel)
 
-for (metric in c("offset", "offset_Relstad")) {
-  
-  p <- ggplot(data_test, aes(
-    x = log(squared.env.dist),
-    y = .data[[metric]],
-    color = sorted_info$Country.code..ISO.3166.,
-    label = sorted_info$Site
-  )) +
-    geom_point(size = 5) +
-    geom_text_repel(size = 3, max.overlaps = 40) +
-    geom_smooth(method = "lm", se = FALSE, color = "black", linetype = "dashed") +
-    labs(x = "Log(Environmental distance)", y = metric, color = "Country") +
-    theme_bw()
-  
-  # Save PNG
-  ggsave(
-    filename = paste0(fig_output, file_name, "_Genomic_offset_", metric, ".png"),
-    plot = p,
-    width = 10, height = 10, units = "in", dpi = 300
-  )
-  
-  # Save SVG
-  ggsave(
-    filename = paste0(fig_output, file_name, "_Genomic_offset_", metric, ".svg"),
-    plot = p,
-    width = 10, height = 10, units = "in"
-  )
-}
+# --- 1. Setup Directories ---
+message("Folders creation...")
+create_directory(go_folder)
+work.directory <- paste0(go_folder, "file/")
+fig_output     <- paste0(go_folder, "figure/")
+env_output     <- paste0(go_folder, "env/")
 
-####----- Prediction with candidate SNPs -----
-message("Prediction with candidate SNPs...")
+lapply(c(work.directory, fig_output, env_output), create_directory)
+message("...Done")
 
-# Load candidate SNPs
-GEA_snp <- read.csv(paste0(lfmm_folder, "file/", file_name, "_SNPs_associated_with_all_bio.csv"), header = TRUE)
-list_GEA_snp <- GEA_snp$x
+# --- 2. Load Genomic & Environmental Data ---
+file_name <- basename(sub("\\.lfmm$", "", lfmm))
+info_ref_all_SYL <- read.table(ref, header = TRUE, sep = '\t')
+sorted_info      <- info_ref_all_SYL[order(info_ref_all_SYL$Order_vcf), ]
 
-# Compute genomic offset with candidate SNPs
-g.gap.scaled.bis <- genetic.gap(
-  input = Y, env = X, pred.env = X.pred,
-  scale = TRUE, K = K, candidate.loci = list_GEA_snp
+# Load Genotype (Y)
+geno_path <- ifelse(
+  file.exists(paste0(computational_folder, "file/", file_name, "_filt.lfmm_imputed.geno")),
+  paste0(computational_folder, "file/", file_name, "_filt.lfmm_imputed.geno"),
+  paste0(computational_folder, "file/", file_name, "_filt.geno")
+)
+Y <- read.geno(geno_path)
+
+# Load Environmental (X and X.pred)
+env_name_1 <- basename(sub("\\.csv$", "", env.1))
+X          <- read.env(paste0(lfmm_folder, "env/", env_name_1, ".env"))
+
+env_name_2 <- basename(sub("\\.csv$", "", env.2))
+out_file   <- file.path(env_output, paste0(env_name_2, ".env"))
+next_env   <- read.delim(env.2, header = FALSE, sep = '\t', dec = '.')
+env.format.2 <- scale(next_env, center = FALSE, scale = FALSE)
+write.env(env.format.2, out_file)
+X.pred     <- read.env(out_file)
+
+# --- 3. Define SNP Sets to Process ---
+# Load candidate lists (adjust paths if necessary)
+gea_bonf <- read.csv(paste0(lfmm_folder, "file/", file_name, "_TIPS_GEA_Bonf.csv"))$x
+gea_fdr  <- read.csv(paste0(lfmm_folder, "file/", file_name, "_TIPS_GEA_FDR.csv"))$x
+
+# Create a named list: NULL means "All SNPs"
+tips_lists <- list(
+  "all_SNPs" = NULL,
+  "GEA_Bonferroni" = gea_bonf,
+  "GEA_FDR" = gea_fdr
 )
 
-# Prepare data frame for plotting
-data_test_bis <- cbind(
-  squared.env.dist,
-  g.gap.scaled.bis$offset,
-  g.gap.scaled.bis$distance
-)
-colnames(data_test_bis) <- c("squared.env.dist", "offset", "offset_Relstad")
-write.table(x=data_test_bis, paste0(work.directory, file_name, "_GEA_SNPs_offset_prediction.tsv"), row.names=F)
+# --- 4. Calculation and Plotting Loop ---
+# Pre-calculate environmental distance once
+Delta <- X[, 1:19] - X.pred[, 1:19]
+squared.env.dist <- rowSums(Delta^2)
 
-# --- Plots for candidate SNPs ---
-for (metric in c("offset", "offset_Relstad")) {
+for (set_name in names(tips_lists)) {
+  message(paste("Processing set:", set_name))
   
-  p <- ggplot(data_test_bis, aes(
-    x = log(squared.env.dist),
-    y = .data[[metric]],
-    color = sorted_info$Country.code..ISO.3166.,
-    label = sorted_info$Site
-  )) +
-    geom_point(size = 5) +
-    geom_text_repel(size = 3, max.overlaps = 40) +
-    geom_smooth(method = "lm", se = FALSE, color = "black", linetype = "dashed") +
-    labs(x = "Log(Environmental distance)", y = metric, color = "Country") +
-    theme_bw()
-  
-  # Save PNG
-  ggsave(
-    filename = paste0(fig_output, file_name, "_Genomic_offset_GEA_SNP_", metric, ".png"),
-    plot = p,
-    width = 10, height = 10, units = "in", dpi = 300
+  # Run genetic gap
+  # candidate.loci = NULL defaults to all SNPs in the 'genetic.gap' function
+  g_gap <- genetic.gap(
+    input = Y, 
+    env = X, 
+    pred.env = X.pred, 
+    scale = TRUE, 
+    K = K, 
+    candidate.loci = tips_lists[[set_name]]
   )
   
-  # Save SVG
-  ggsave(
-    filename = paste0(fig_output, file_name, "_Genomic_offset_GEA_SNP_", metric, ".svg"),
-    plot = p,
-    width = 10, height = 10, units = "in"
+  # Combine results
+  res_df <- data.frame(
+    squared.env.dist = squared.env.dist,
+    offset = g_gap$offset,
+    offset_Relstad = g_gap$distance,
+    Country = sorted_info$Country.code..ISO.3166.,
+    Site = sorted_info$Site
   )
+  print(cor(res_df$offset, res_df$squared.env.dist))
+  # Save TSV
+  write.csv(res_df[,1:3], 
+              paste0(work.directory, file_name, "_", set_name, "_offset_prediction.csv"), 
+              row.names = FALSE)
+  
+  # Generate Plots for both metrics
+  for (metric in c("offset", "offset_Relstad")) {
+    p <- ggplot(res_df, aes(
+      x = log(squared.env.dist),
+      y = .data[[metric]],
+      color = Country,
+      label = Site
+    )) +
+      geom_point(size = 5) +
+      geom_text_repel(size = 3, max.overlaps = 40) +
+      geom_smooth(method = "lm", se = FALSE, color = "black", linetype = "dashed") +
+      labs(title = paste(set_name, "-", metric),
+           x = "Log(Environmental distance)", 
+           y = metric) +
+      theme_bw()
+    
+    # Save files
+    base_path <- paste0(fig_output, file_name, "_", set_name, "_", metric)
+    ggsave(paste0(base_path, ".png"), plot = p, width = 10, height = 10, dpi = 300)
+    ggsave(paste0(base_path, ".svg"), plot = p, width = 10, height = 10)
+  }
 }
 
-message("...Done.")
+message("Processing complete.")
