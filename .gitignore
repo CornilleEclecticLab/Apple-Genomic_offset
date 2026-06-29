@@ -43,3 +43,14 @@
 *.vcf
 *out*
 *.RData
+*run*.sh
+*.asc
+*.er
+*.tiff
+*.xlsx
+*fa*
+*/in/*
+*.Rd
+*.fasta
+*.gff*
+*vcf*
